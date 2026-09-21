@@ -146,10 +146,20 @@ nav .btn:hover{border-color:var(--dourado);color:#8a6a20}
 .section-head h2{font-size:clamp(32px,5vw,54px);letter-spacing:-.01em;margin-top:var(--sp-4)}
 .section-head p{color:#6b6656;max-width:620px;margin-top:var(--sp-4);font-size:16px;font-weight:300}
 .intro-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--sp-20);align-items:end}
+.intro-heading{position:relative;padding:var(--sp-6) 0 var(--sp-6) var(--sp-6)}
+.intro-heading:before,.intro-heading:after{content:"";position:absolute;width:20px;height:20px;border:1px solid var(--dourado);opacity:.7}
+.intro-heading:before{top:0;left:0;border-right:0;border-bottom:0}
+.intro-heading:after{bottom:0;left:0;border-right:0;border-top:0}
+.intro-content{border-left:1px solid var(--linha-clara);padding-left:var(--sp-10)}
 .big-copy{font-family:"Playfair Display",serif;font-size:clamp(22px,2.8vw,32px);line-height:1.38;font-weight:500;letter-spacing:-.005em;color:#302e27}
-.stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--linha-clara);margin-top:var(--sp-8)}
-.stat{padding:22px 10px 0 0}
-.stat b{font-family:"Playfair Display";font-size:26px;color:var(--verde)}.stat span{display:block;font-size:12px;color:#8a8574;margin-top:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-top:var(--sp-8)}
+.stat{padding:var(--sp-5) var(--sp-5) var(--sp-5) 0;border-top:2px solid var(--dourado);transition:transform var(--dur-base) var(--ease)}
+.stat:hover{transform:translateY(-3px)}
+.stat b{font-family:"Playfair Display";font-size:30px;color:var(--verde);display:block}.stat span{display:block;font-size:12.5px;color:#8a8574;margin-top:6px;line-height:1.5}
+@media(max-width:1100px){
+  .intro-heading{padding-left:var(--sp-4)}
+  .intro-content{border-left:none;padding-left:0;border-top:1px solid var(--linha-clara);padding-top:var(--sp-8);margin-top:var(--sp-2)}
+}
 
 /* ============================================================
    Serviços

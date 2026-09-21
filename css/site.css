@@ -173,6 +173,17 @@ nav .btn:hover{border-color:var(--dourado);color:#8a6a20}
 .service-body{padding:var(--sp-6) var(--sp-5) var(--sp-6);position:relative;flex:1}
 .service h3{font-size:18px;font-weight:600;color:#f3f1e9}
 .service p{color:#a8a598;font-size:13px;margin-top:var(--sp-2);line-height:1.6}
+.service.is-extra{display:none}
+.services.expanded .service.is-extra{display:flex;animation:serviceReveal var(--dur-slow,.5s) var(--ease-out,ease) both}
+.services.expanded .service.is-extra:nth-child(4n+2){animation-delay:.06s}
+.services.expanded .service.is-extra:nth-child(4n+3){animation-delay:.12s}
+.services.expanded .service.is-extra:nth-child(4n+4){animation-delay:.18s}
+@keyframes serviceReveal{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.services-more{text-align:center;margin-top:var(--sp-8,32px)}
+.services-more[hidden],.services-more .btn[hidden]{display:none}
+.services-more .icon-chevron{width:16px;height:16px;transition:transform var(--dur-base,.3s) var(--ease,ease)}
+.services-more .btn[aria-expanded="true"] .icon-chevron{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){.services.expanded .service.is-extra{animation:none}}
 .services-state{grid-column:1/-1;color:var(--muted);padding:25px;text-align:center;background:var(--verde-deep)}
 
 /* ============================================================

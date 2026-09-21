@@ -16,13 +16,18 @@
 
   if(menu && mobile){
     menu.addEventListener('click',()=>{
-      const open=mobile.style.display==='block';
-      mobile.style.display=open?'none':'block';
+      const open=mobile.classList.contains('open');
+      mobile.classList.toggle('open',!open);
       document.body.style.overflow=open?'':'hidden';
     });
     mobile.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
-      mobile.style.display='none'; document.body.style.overflow='';
+      mobile.classList.remove('open'); document.body.style.overflow='';
     }));
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && mobile.classList.contains('open')){
+        mobile.classList.remove('open'); document.body.style.overflow='';
+      }
+    });
   }
 
   if(backTop) backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));

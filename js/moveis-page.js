@@ -40,6 +40,7 @@
     box.querySelectorAll(".product-video-link").forEach(el=>{
       el.addEventListener("click",()=>{ if(window.designeOpenVideo) window.designeOpenVideo(el.dataset.video, el.dataset.title); });
     });
+    if(window.designeAnimateNew) window.designeAnimateNew(box);
   }
   load();
 })();

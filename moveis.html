@@ -32,10 +32,10 @@
   </div>
 </header>
 
-<div id="mobile" style="position:fixed;inset:0;background:#151f18;z-index:40;display:none;padding:120px 25px">
-  <div style="display:flex;flex-direction:column;gap:25px;font-family:'Playfair Display',serif;font-weight:600;font-size:30px;color:#faf8f2">
-    <a href="index.html#inicio">Início</a><a href="moveis.html">Móveis</a><a href="index.html#projetos">Projetos</a><a href="index.html#sobre">Sobre</a><a href="index.html#contactos">Contacto</a><a href="admin/login.html" style="font-size:16px;opacity:.6;font-family:'Manrope'">Área administrativa</a>
-    <a class="btn btn-gold" style="font-size:13px" data-wa-link data-wa-text="Olá, DESIGNE decoração. Gostaria de solicitar um orçamento." href="https://wa.me/244937283518" target="_blank" rel="noopener">Solicitar orçamento</a>
+<div id="mobile">
+  <div class="mobile-links">
+    <a href="index.html#inicio">Início</a><a href="moveis.html">Móveis</a><a href="index.html#projetos">Projetos</a><a href="index.html#sobre">Sobre</a><a href="index.html#contactos">Contacto</a><a href="admin/login.html" class="mobile-admin">Área administrativa</a>
+    <a class="btn btn-gold" data-wa-link data-wa-text="Olá, DESIGNE decoração. Gostaria de solicitar um orçamento." href="https://wa.me/244937283518" target="_blank" rel="noopener">Solicitar orçamento</a>
   </div>
 </div>
 
@@ -49,7 +49,9 @@
       <p style="color:#a8a598">Conheça todos os móveis planejados pela DESIGNE decoração e fale connosco diretamente pelo WhatsApp. <span id="moveisCount"></span></p>
     </div>
     <div class="products-grid" id="allMoveisGrid">
-      <div class="products-state">A carregar móveis…</div>
+      <div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+      <div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+      <div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
     </div>
   </div>
 </section>
@@ -108,5 +110,6 @@
 <script src="js/video-utils.js"></script>
 <script src="js/moveis-page.js"></script>
 <script src="js/lightbox.js"></script>
+<script src="js/motion.js"></script>
 </body>
 </html>

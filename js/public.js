@@ -38,6 +38,7 @@
     });
     const seeAll=document.getElementById("seeAllMoveis");
     if(seeAll) seeAll.hidden = data.length<=HOME_MOVEIS_LIMIT;
+    if(window.designeAnimateNew) window.designeAnimateNew(box);
   }
 
   async function loadServices(){
@@ -49,6 +50,7 @@
       <img class="service-photo" src="${esc(s.imagem_url || "assets/hero.jpg")}" alt="${esc(s.titulo)}" loading="lazy">
       <div class="service-body"><h3>${esc(s.titulo)}</h3><p>${esc(s.descricao || "")}</p></div>
     </article>`).join("");
+    if(window.designeAnimateNew) window.designeAnimateNew(box);
   }
 
   const HOME_PROJETOS_LIMIT = 4;
@@ -69,6 +71,7 @@
     window.designeAttachProjetoHandlers(gallery, shown);
     const seeGallery=document.getElementById("seeGallery");
     if(seeGallery) seeGallery.hidden = data.length<=HOME_PROJETOS_LIMIT;
+    if(window.designeAnimateNew) window.designeAnimateNew(gallery);
   }
 
   // Vídeo em destaque na home — "Veja o nosso trabalho ganhar vida"

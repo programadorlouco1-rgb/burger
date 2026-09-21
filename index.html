@@ -32,28 +32,37 @@
   </div>
 </header>
 
-<div id="mobile" style="position:fixed;inset:0;background:#151f18;z-index:40;display:none;padding:120px 25px">
-  <div style="display:flex;flex-direction:column;gap:25px;font-family:'Playfair Display',serif;font-weight:600;font-size:30px;color:#faf8f2">
-    <a href="#inicio">Início</a><a href="#moveis">Móveis</a><a href="#projetos">Projetos</a><a href="#sobre">Sobre</a><a href="#contactos">Contacto</a><a href="admin/login.html" style="font-size:16px;opacity:.6;font-family:'Manrope'">Área administrativa</a>
-    <a class="btn btn-gold" style="font-size:13px" data-wa-link data-wa-text="Olá, DESIGNE decoração. Gostaria de solicitar um orçamento." href="https://wa.me/244937283518" target="_blank" rel="noopener">Solicitar orçamento</a>
+<div id="mobile">
+  <div class="mobile-links">
+    <a href="#inicio">Início</a><a href="#moveis">Móveis</a><a href="#projetos">Projetos</a><a href="#sobre">Sobre</a><a href="#contactos">Contacto</a><a href="admin/login.html" class="mobile-admin">Área administrativa</a>
+    <a class="btn btn-gold" data-wa-link data-wa-text="Olá, DESIGNE decoração. Gostaria de solicitar um orçamento." href="https://wa.me/244937283518" target="_blank" rel="noopener">Solicitar orçamento</a>
   </div>
 </div>
 
 <main>
 <section class="hero" id="inicio">
-  <div class="hero-bg"><img src="assets/hero.jpg" alt="Painel de TV planejado com acabamento em mármore e ripado de madeira — DESIGNE decoração"></div>
-  <div class="container hero-content">
-    <div class="eyebrow">Móveis Planejados • Design de Interiores</div>
-    <h1 id="heroTitulo">Móveis planejados <span>para transformar o seu espaço.</span></h1>
-    <p class="hero-copy" id="heroSubtitulo">Projetamos e fabricamos móveis sob medida, unindo funcionalidade, elegância e qualidade em cada detalhe.</p>
-    <div class="actions">
-      <a class="btn btn-gold" data-wa-link data-wa-text="Olá, DESIGNE decoração. Gostaria de solicitar um orçamento." href="https://wa.me/244937283518" target="_blank" rel="noopener">Solicitar orçamento ↗</a>
-      <a class="btn btn-outline" href="#projetos">Ver projetos</a>
+  <div class="hero-bg-wash"></div>
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="eyebrow">Móveis Planejados • Design de Interiores</div>
+      <h1 id="heroTitulo">Móveis planejados <span>para transformar o seu espaço.</span></h1>
+      <p class="hero-copy" id="heroSubtitulo">Projetamos e fabricamos móveis sob medida, unindo funcionalidade, elegância e qualidade em cada detalhe.</p>
+      <div class="actions">
+        <a class="btn btn-gold" data-wa-link data-wa-text="Olá, DESIGNE decoração. Gostaria de solicitar um orçamento." href="https://wa.me/244937283518" target="_blank" rel="noopener">Solicitar orçamento ↗</a>
+        <a class="btn btn-outline" href="#projetos">Ver projetos</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong>Luanda</strong><span>Angola</span></div>
+        <div><strong>937 283 518</strong><span>WhatsApp / Ligar agora</span></div>
+        <div><strong>DESIGNE decoração</strong><span>Fabricação sob medida</span></div>
+      </div>
     </div>
-    <div class="hero-meta">
-      <div><strong>Luanda</strong><span>Angola</span></div>
-      <div><strong>937 283 518</strong><span>WhatsApp / Ligar agora</span></div>
-      <div><strong>DESIGNE decoração</strong><span>Fabricação sob medida</span></div>
+    <div class="hero-visual">
+      <div class="hero-visual-frame">
+        <div class="hero-visual-img">
+          <img src="assets/hero.jpg" width="720" height="899" fetchpriority="high" alt="Painel de TV planejado com acabamento em mármore e ripado de madeira — DESIGNE decoração">
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -82,10 +91,10 @@
       <p>Da estrutura ao acabamento, a DESIGNE decoração trabalha para que o seu espaço tenha funcionalidade, elegância e qualidade em cada detalhe.</p>
     </div>
     <div class="services" id="publicServices">
-      <article class="service"><img class="service-photo" src="assets/rack-painel-madeira.jpg" alt="Móveis planejados"><div class="service-body"><h3>Móveis planejados</h3><p>Soluções sob medida para cada ambiente da sua casa.</p></div></article>
-      <article class="service"><img class="service-photo" src="assets/cozinha-planejada.jpg" alt="Cozinhas"><div class="service-body"><h3>Cozinhas</h3><p>Cozinhas planejadas com funcionalidade e acabamento premium.</p></div></article>
-      <article class="service"><img class="service-photo" src="assets/hero.jpg" alt="Guarda-fatos"><div class="service-body"><h3>Guarda-fatos</h3><p>Organização e elegância com design personalizado.</p></div></article>
-      <article class="service"><img class="service-photo" src="assets/pergola-madeira.jpg" alt="Pérgolas"><div class="service-body"><h3>Pérgolas</h3><p>Estruturas em madeira para áreas externas e lazer.</p></div></article>
+      <article class="service"><img class="service-photo" src="assets/rack-painel-madeira.jpg" loading="lazy" alt="Móveis planejados"><div class="service-body"><h3>Móveis planejados</h3><p>Soluções sob medida para cada ambiente da sua casa.</p></div></article>
+      <article class="service"><img class="service-photo" src="assets/cozinha-planejada.jpg" loading="lazy" alt="Cozinhas"><div class="service-body"><h3>Cozinhas</h3><p>Cozinhas planejadas com funcionalidade e acabamento premium.</p></div></article>
+      <article class="service"><img class="service-photo" src="assets/hero.jpg" loading="lazy" alt="Guarda-fatos"><div class="service-body"><h3>Guarda-fatos</h3><p>Organização e elegância com design personalizado.</p></div></article>
+      <article class="service"><img class="service-photo" src="assets/pergola-madeira.jpg" loading="lazy" alt="Pérgolas"><div class="service-body"><h3>Pérgolas</h3><p>Estruturas em madeira para áreas externas e lazer.</p></div></article>
     </div>
   </div>
 </section>
@@ -97,10 +106,10 @@
       <h2>Nossos móveis.</h2>
       <p>Conheça alguns dos móveis planejados pela DESIGNE decoração e fale connosco diretamente pelo WhatsApp para um orçamento sob medida.</p>
     </div>
-    <div class="products-grid" id="publicMoveis" style="background:var(--linha-clara)">
-      <article class="product-card"><img src="assets/rack-painel-madeira.jpg" alt="Rack e painel de madeira sob medida"><div class="product-card-body"><div class="eyebrow">Racks &amp; Painéis</div><h3>Rack em madeira sob medida</h3><p>Estrutura em madeira maciça com nichos e gavetas planejadas.</p><div class="product-meta"><span class="product-price">Preço sob orçamento</span><span class="product-status">Disponível</span></div><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/244937283518?text=Ol%C3%A1%2C%20DESIGNE%20decora%C3%A7%C3%A3o.%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento.">Solicitar orçamento ↗</a></div></article>
-      <article class="product-card"><img src="assets/cozinha-planejada.jpg" alt="Cozinha planejada"><div class="product-card-body"><div class="eyebrow">Cozinhas</div><h3>Cozinha planejada</h3><p>Armários e bancada integrados, com aproveitamento total do espaço.</p><div class="product-meta"><span class="product-price">Preço sob orçamento</span><span class="product-status">Disponível</span></div><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/244937283518?text=Ol%C3%A1%2C%20DESIGNE%20decora%C3%A7%C3%A3o.%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento.">Solicitar orçamento ↗</a></div></article>
-      <article class="product-card"><img src="assets/painel-tv-marmore.jpg" alt="Painel de TV com acabamento em mármore"><div class="product-card-body"><div class="eyebrow">Painéis</div><h3>Painel de TV em mármore</h3><p>Combinação de mármore, madeira e iluminação embutida.</p><div class="product-meta"><span class="product-price">Preço sob orçamento</span><span class="product-status">Disponível</span></div><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/244937283518?text=Ol%C3%A1%2C%20DESIGNE%20decora%C3%A7%C3%A3o.%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento.">Solicitar orçamento ↗</a></div></article>
+    <div class="products-grid" id="publicMoveis">
+      <article class="product-card"><img src="assets/rack-painel-madeira.jpg" loading="lazy" alt="Rack e painel de madeira sob medida"><div class="product-card-body"><div class="eyebrow">Racks &amp; Painéis</div><h3>Rack em madeira sob medida</h3><p>Estrutura em madeira maciça com nichos e gavetas planejadas.</p><div class="product-meta"><span class="product-price">Preço sob orçamento</span><span class="product-status">Disponível</span></div><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/244937283518?text=Ol%C3%A1%2C%20DESIGNE%20decora%C3%A7%C3%A3o.%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento.">Solicitar orçamento ↗</a></div></article>
+      <article class="product-card"><img src="assets/cozinha-planejada.jpg" loading="lazy" alt="Cozinha planejada"><div class="product-card-body"><div class="eyebrow">Cozinhas</div><h3>Cozinha planejada</h3><p>Armários e bancada integrados, com aproveitamento total do espaço.</p><div class="product-meta"><span class="product-price">Preço sob orçamento</span><span class="product-status">Disponível</span></div><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/244937283518?text=Ol%C3%A1%2C%20DESIGNE%20decora%C3%A7%C3%A3o.%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento.">Solicitar orçamento ↗</a></div></article>
+      <article class="product-card"><img src="assets/painel-tv-marmore.jpg" loading="lazy" alt="Painel de TV com acabamento em mármore"><div class="product-card-body"><div class="eyebrow">Painéis</div><h3>Painel de TV em mármore</h3><p>Combinação de mármore, madeira e iluminação embutida.</p><div class="product-meta"><span class="product-price">Preço sob orçamento</span><span class="product-status">Disponível</span></div><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/244937283518?text=Ol%C3%A1%2C%20DESIGNE%20decora%C3%A7%C3%A3o.%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento.">Solicitar orçamento ↗</a></div></article>
     </div>
     <div style="text-align:center;margin-top:36px"><a class="btn btn-outline-dark" id="seeAllMoveis" href="moveis.html" hidden>Ver todos os móveis ↗</a></div>
   </div>
@@ -110,7 +119,7 @@
   <div class="container" style="padding:110px 0">
     <div class="video-feature-grid">
       <div class="video-thumb-wrap" id="featuredVideoThumb">
-        <img src="assets/hero.jpg" alt="Vídeo em destaque — DESIGNE decoração">
+        <img src="assets/hero.jpg" loading="lazy" alt="Vídeo em destaque — DESIGNE decoração">
         <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
       </div>
       <div>
@@ -131,10 +140,10 @@
       <p>Uma seleção de projetos e referências de acabamento, para mostrar o nível de qualidade e o estilo que pode orientar o seu próximo espaço.</p>
     </div>
     <div class="gallery" id="publicGallery">
-      <div class="g g1"><img src="assets/painel-tv-marmore.jpg" alt="Painel de TV com acabamento em mármore e ripado de madeira — DESIGNE decoração"><span class="g-cat">Painéis</span><span class="caption">Painel de TV & ripado decorativo</span></div>
-      <div class="g g2"><img src="assets/cozinha-planejada.jpg" alt="Cozinha planejada com bancada em granito — DESIGNE decoração"><span class="g-cat">Cozinhas</span><span class="caption">Cozinha planejada</span></div>
-      <div class="g g3"><img src="assets/rack-painel-madeira.jpg" alt="Rack e painel de madeira sob medida — DESIGNE decoração"><span class="g-cat">Racks</span><span class="caption">Rack em madeira</span></div>
-      <div class="g g4"><img src="assets/pergola-madeira.jpg" alt="Pérgola de madeira em área de piscina — DESIGNE decoração"><span class="g-cat">Pérgolas</span><span class="caption">Pérgola sob medida</span></div>
+      <div class="g g1"><img src="assets/painel-tv-marmore.jpg" loading="lazy" alt="Painel de TV com acabamento em mármore e ripado de madeira — DESIGNE decoração"><span class="g-cat">Painéis</span><span class="caption">Painel de TV & ripado decorativo</span></div>
+      <div class="g g2"><img src="assets/cozinha-planejada.jpg" loading="lazy" alt="Cozinha planejada com bancada em granito — DESIGNE decoração"><span class="g-cat">Cozinhas</span><span class="caption">Cozinha planejada</span></div>
+      <div class="g g3"><img src="assets/rack-painel-madeira.jpg" loading="lazy" alt="Rack e painel de madeira sob medida — DESIGNE decoração"><span class="g-cat">Racks</span><span class="caption">Rack em madeira</span></div>
+      <div class="g g4"><img src="assets/pergola-madeira.jpg" loading="lazy" alt="Pérgola de madeira em área de piscina — DESIGNE decoração"><span class="g-cat">Pérgolas</span><span class="caption">Pérgola sob medida</span></div>
     </div>
     <div style="text-align:center;margin-top:36px"><a class="btn btn-gold" id="seeGallery" href="projetos.html" hidden>Ver todos os projetos ↗</a></div>
   </div>
@@ -144,7 +153,7 @@
   <div class="container">
     <div class="why">
       <div class="why-visual">
-        <img src="assets/why.jpg" alt="Detalhe de acabamento em madeira — DESIGNE decoração">
+        <img src="assets/why.jpg" loading="lazy" alt="Detalhe de acabamento em madeira — DESIGNE decoração">
         <div class="badge">A MELHOR QUALIDADE<br>MORA AQUI NA DESIGNE</div>
       </div>
       <div>
@@ -214,7 +223,8 @@
         </label>
       </div>
       <label>Fale um pouco sobre o projeto<textarea id="mensagem" name="mensagem" rows="5" placeholder="Ex.: preciso de um guarda-fatos planejado para um quarto de 3x4m, gostaria de saber as opções e fazer um orçamento..."></textarea></label>
-      <button class="btn btn-gold form-submit" type="submit">Pedir orçamento ↗</button>
+      <button class="btn btn-gold form-submit" type="submit" id="quoteSubmit">Pedir orçamento ↗</button>
+      <small class="form-feedback" id="quoteFeedback" hidden>A abrir o WhatsApp…</small>
       <small class="form-privacy">Ao enviar, os dados serão usados apenas para iniciar o atendimento pelo WhatsApp.</small>
     </form>
   </div>
@@ -326,17 +336,24 @@
 <script src="js/projeto-utils.js"></script>
 <script src="js/public.js"></script>
 <script src="js/lightbox.js"></script>
+<script src="js/motion.js"></script>
 <script>
 const quoteForm=document.getElementById('quoteForm');
+const quoteSubmit=document.getElementById('quoteSubmit');
+const quoteFeedback=document.getElementById('quoteFeedback');
 quoteForm.addEventListener('submit',(e)=>{
   e.preventDefault();
+  if(!quoteForm.checkValidity()){ quoteForm.reportValidity(); return; }
   const nome=document.getElementById('nome').value.trim();
   const telefone=document.getElementById('telefone').value.trim();
   const servico=document.getElementById('servico').value;
   const ambiente=document.getElementById('ambiente').value || 'Não informado';
   const mensagem=document.getElementById('mensagem').value.trim() || 'Não informado';
   const text=`Olá, DESIGNE decoração! Vim pelo site e gostaria de solicitar um orçamento.\n\nNome: ${nome}\nTelefone: ${telefone}\nMóvel/Serviço: ${servico}\nLocalização: ${ambiente}\nDetalhes: ${mensagem}`;
+  quoteSubmit.classList.add('is-sending');
+  if(quoteFeedback) quoteFeedback.hidden=false;
   window.open('https://wa.me/'+window.DESIGNE_WHATSAPP+'?text='+encodeURIComponent(text),'_blank');
+  setTimeout(()=>{ quoteSubmit.classList.remove('is-sending'); if(quoteFeedback) quoteFeedback.hidden=true; },1800);
 });
 </script>
 </body>

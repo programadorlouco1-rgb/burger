@@ -23,6 +23,7 @@
     </div>`).join("");
 
     if(window.designeAttachProjetoHandlers) window.designeAttachProjetoHandlers(box, data);
+    if(window.designeAnimateNew) window.designeAnimateNew(box);
   }
   load();
 })();

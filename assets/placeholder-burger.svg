@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Foto de exemplo de hambúrguer">
+  <defs>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="8" r="3" fill="#17110D" opacity=".10"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="600" fill="#FFC629"/>
+  <rect width="600" height="600" fill="url(#dots)"/>
+
+  <!-- pão de baixo -->
+  <path d="M110 400h380c0 46-30 74-70 74H180c-40 0-70-28-70-74z" fill="#E59A2E" stroke="#17110D" stroke-width="10" stroke-linejoin="round"/>
+  <!-- carne -->
+  <rect x="98" y="345" width="404" height="62" rx="31" fill="#5A2D14" stroke="#17110D" stroke-width="10"/>
+  <!-- queijo derretido -->
+  <path d="M100 318H500V336H430L410 372L390 336H300L280 362L260 336H100Z" fill="#FFD84D" stroke="#17110D" stroke-width="10" stroke-linejoin="round"/>
+  <!-- tomate -->
+  <rect x="118" y="292" width="364" height="34" rx="17" fill="#E8362B" stroke="#17110D" stroke-width="10"/>
+  <!-- alface -->
+  <path d="M96 288q25-28 50 0t50 0t50 0t50 0t50 0t50 0t50 0v22H96z" fill="#5FB04A" stroke="#17110D" stroke-width="10" stroke-linejoin="round"/>
+  <!-- pão de cima -->
+  <path d="M110 270C110 160 190 110 300 110S490 160 490 270Z" fill="#F0A93B" stroke="#17110D" stroke-width="10" stroke-linejoin="round"/>
+  <g fill="#FFF4DD">
+    <ellipse cx="220" cy="175" rx="12" ry="6" transform="rotate(-25 220 175)"/>
+    <ellipse cx="300" cy="150" rx="12" ry="6"/>
+    <ellipse cx="380" cy="178" rx="12" ry="6" transform="rotate(25 380 178)"/>
+    <ellipse cx="260" cy="220" rx="12" ry="6" transform="rotate(-10 260 220)"/>
+    <ellipse cx="345" cy="222" rx="12" ry="6" transform="rotate(12 345 222)"/>
+  </g>
+
+  <!-- etiqueta de placeholder -->
+  <g transform="rotate(-6 300 535)">
+    <rect x="140" y="508" width="320" height="54" rx="10" fill="#FFF4DD" stroke="#17110D" stroke-width="6"/>
+    <text x="300" y="545" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="#17110D">FOTO REAL AQUI</text>
+  </g>
+</svg>

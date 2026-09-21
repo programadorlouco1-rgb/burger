@@ -1,16 +1,18 @@
-// Configuração pública do Supabase — projeto NOVO e exclusivo da DESIGNE decoração.
-// A ANON/Publishable key pode ficar no frontend. NUNCA coloque aqui a service_role key.
-window.DESIGNE_SUPABASE_URL = "https://neahtbiroeabdqjuscla.supabase.co";
-window.DESIGNE_SUPABASE_ANON_KEY = "sb_publishable_VowT6m0n3LO79oHwuro3Yg_R_MJuAbq";
+// Configuração pública do Supabase — projeto NOVO e exclusivo da Cokylicious.
+// (O projeto Supabase que estava aqui era o da DESIGNE decoração: NÃO o reutilizes.)
+//
+// 1) Cria um projeto novo em supabase.com e corre o supabase.sql inteiro no SQL Editor.
+// 2) Em Project Settings > API copia o "Project URL" e a chave pública (anon / publishable).
+// 3) Cola-os abaixo. A chave anon pode ficar no frontend; NUNCA coloques aqui a service_role.
+//
+// Enquanto isto não estiver preenchido, o site funciona em MODO DEMO (js/demo-data.js).
+window.DESIGNE_SUPABASE_URL = "COLE_AQUI_O_PROJECT_URL";
+window.DESIGNE_SUPABASE_ANON_KEY = "COLE_AQUI_A_ANON_KEY";
 
-window.designeSupabase = (window.supabase && window.DESIGNE_SUPABASE_URL.startsWith("http") &&
-  !window.DESIGNE_SUPABASE_URL.includes("SEU-PROJETO") &&
-  window.DESIGNE_SUPABASE_ANON_KEY && !window.DESIGNE_SUPABASE_ANON_KEY.includes("SUA_ANON_KEY"))
+// (O prefixo "DESIGNE_" / "designeSupabase" é herdado do projeto anterior e mantido de propósito
+// para não mexer em todas as páginas do admin. Podes renomear tudo com "Substituir" no editor.)
+window.designeSupabase = (window.supabase &&
+  /^https?:\/\//.test(window.DESIGNE_SUPABASE_URL) && !window.DESIGNE_SUPABASE_URL.includes("COLE_AQUI") &&
+  window.DESIGNE_SUPABASE_ANON_KEY && !window.DESIGNE_SUPABASE_ANON_KEY.includes("COLE_AQUI"))
   ? window.supabase.createClient(window.DESIGNE_SUPABASE_URL, window.DESIGNE_SUPABASE_ANON_KEY)
   : null;
-
-// Valores por omissão (usados até o Supabase carregar site_config, ou se o Supabase não estiver configurado).
-window.DESIGNE_WHATSAPP = "244937283518";
-window.DESIGNE_TELEFONE = "+244937283518";
-window.DESIGNE_FACEBOOK = "https://www.facebook.com/profile.php?id=61594299960665";
-window.DESIGNE_MAPS = "https://goo.gl/maps/QA4SUg5wVFsPjejg6?g_st=ac";

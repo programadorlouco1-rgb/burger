@@ -4,8 +4,8 @@ window.DESIGNE_SUPABASE_URL = "https://neahtbiroeabdqjuscla.supabase.co";
 window.DESIGNE_SUPABASE_ANON_KEY = "sb_publishable_VowT6m0n3LO79oHwuro3Yg_R_MJuAbq";
 
 window.designeSupabase = (window.supabase && window.DESIGNE_SUPABASE_URL.startsWith("http") &&
-  !window.DESIGNE_SUPABASE_URL.includes("https://neahtbiroeabdqjuscla.supabase.co") &&
-  window.DESIGNE_SUPABASE_ANON_KEY && !window.DESIGNE_SUPABASE_ANON_KEY.includes("sb_publishable_VowT6m0n3LO79oHwuro3Yg_R_MJuAbq"))
+  !window.DESIGNE_SUPABASE_URL.includes("SEU-PROJETO") &&
+  window.DESIGNE_SUPABASE_ANON_KEY && !window.DESIGNE_SUPABASE_ANON_KEY.includes("SUA_ANON_KEY"))
   ? window.supabase.createClient(window.DESIGNE_SUPABASE_URL, window.DESIGNE_SUPABASE_ANON_KEY)
   : null;
 

@@ -20,7 +20,7 @@
         <h3>${esc(p.nome)}</h3>
         <p>${esc(p.descricao || "")}</p>
         <div class="product-meta"><span class="product-price">${esc(money(p.preco))}</span><span class="product-status">Disponível</span></div>
-        <a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(p.nome)}">Solicitar orçamento ↗</a>
+        <a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(p.nome)}">Solicitar orçamento <svg class='icon' aria-hidden='true'><use href='#i-external'/></svg></a>
         ${p.videos?.video_uid?`<span class="product-video-link" data-video="${esc(p.videos.video_uid)}" data-title="${esc(p.nome)}">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Veja este móvel em vídeo
         </span>`:""}
@@ -102,7 +102,7 @@
     setText("#sobreTitulo", data.sobre_titulo);
     setText("#sobreTexto", data.sobre_texto);
     document.querySelectorAll('[data-wa-link]').forEach(a=>{ a.href = `https://wa.me/${window.DESIGNE_WHATSAPP}` + (a.dataset.waText?`?text=${encodeURIComponent(a.dataset.waText)}`:""); });
-    document.querySelectorAll('[data-tel-link]').forEach(a=>{ a.href = `tel:${window.DESIGNE_TELEFONE.replace(/\s/g,"")}`; a.textContent = window.DESIGNE_TELEFONE; });
+    document.querySelectorAll('[data-tel-link]').forEach(a=>{ a.href = `tel:${window.DESIGNE_TELEFONE.replace(/\s/g,"")}`; if(!a.querySelector('svg')) a.textContent = window.DESIGNE_TELEFONE; });
     document.querySelectorAll('[data-fb-link]').forEach(a=>{ a.href = window.DESIGNE_FACEBOOK; });
     document.querySelectorAll('[data-maps-link]').forEach(a=>{ a.href = window.DESIGNE_MAPS; });
   }

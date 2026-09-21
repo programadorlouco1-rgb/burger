@@ -23,7 +23,7 @@
         <h3>${esc(p.nome)}</h3>
         <p>${esc(p.descricao || "")}</p>
         <div class="product-meta"><span class="product-price">${esc(money(p.preco))}</span><span class="product-status">Disponível</span></div>
-        <a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(p.nome)}">Solicitar orçamento ↗</a>
+        <a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(p.nome)}">Solicitar orçamento <svg class='icon' aria-hidden='true'><use href='#i-external'/></svg></a>
         ${p.videos?.video_uid?`<span class="product-video-link" data-video="${esc(p.videos.video_uid)}" data-title="${esc(p.nome)}">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Veja este móvel em vídeo
         </span>`:""}

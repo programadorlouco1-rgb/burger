@@ -131,8 +131,8 @@
         <h2>${esc(projeto.titulo)}</h2>
         ${projeto.descricao?`<p class="desc">${esc(projeto.descricao)}</p>`:""}
         <div class="actions" style="margin-top:26px">
-          <a class="btn btn-outline-dark" target="_blank" rel="noopener" href="${waLink}">Solicitar orçamento ↗</a>
-          ${projeto.videos?.video_uid?`<button class="btn btn-gold" type="button" id="projectVideoBtn">▶ Veja este projeto em vídeo</button>`:""}
+          <a class="btn btn-outline-dark" target="_blank" rel="noopener" href="${waLink}">Solicitar orçamento <svg class='icon' aria-hidden='true'><use href='#i-external'/></svg></a>
+          ${projeto.videos?.video_uid?`<button class="btn btn-gold" type="button" id="projectVideoBtn"><svg class='icon icon-fill' aria-hidden='true'><use href='#i-play'/></svg> Veja este projeto em vídeo</button>`:""}
         </div>
         ${fotos.length?`<div class="project-photos">${fotos.map(f=>`<img src="${esc(f.imagem_url)}" alt="${esc(projeto.titulo)}" data-src="${esc(f.imagem_url)}">`).join("")}</div>`:""}
       </div>`;

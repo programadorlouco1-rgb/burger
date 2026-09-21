@@ -75,11 +75,11 @@ insert into public.admin_users(user_id) values ('UUID-DO-ADMIN');
 1. Faça upload do vídeo no **Cloudflare Stream** (dashboard da Cloudflare, ou pelo telemóvel em
    cloudflarestream.com/watch — funciona no browser do telemóvel, sem precisar de app).
 2. Aguarde o processamento e copie o **UID do vídeo**.
-3. No admin, vá a **🎥 Vídeos → + Adicionar vídeo**, cole o UID, escolha uma thumbnail, associe
+3. No admin, vá a **Vídeos → + Adicionar vídeo**, cole o UID, escolha uma thumbnail, associe
    (opcionalmente) a um projeto ou móvel, e marque "Publicado".
 4. Se preferir usar YouTube/Vimeo em vez do Cloudflare Stream, cole o link do vídeo no mesmo
    campo — o site reconhece automaticamente.
-5. Marque "⭐ Vídeo em destaque" para ele aparecer no bloco "Veja o nosso trabalho ganhar vida" na
+5. Marque "Vídeo em destaque" para ele aparecer no bloco "Veja o nosso trabalho ganhar vida" na
    home — só pode haver um vídeo em destaque de cada vez (o admin desmarca o anterior sozinho).
 6. Antes de publicar em produção, edite `js/video-utils.js` e troque `customer-CODIGO` pelo seu
    customer code do Cloudflare Stream (aparece no painel do Stream, ao lado de qualquer vídeo).
@@ -89,6 +89,22 @@ insert into public.admin_users(user_id) values ('UUID-DO-ADMIN');
 gera URLs de upload direto para o Stream, permitindo mandar o vídeo sem sair do painel admin da
 DESIGNE decoração. Não está implantado — precisa de uma conta Cloudflare Stream, de um API Token e
 de `wrangler deploy`. Até lá, o fluxo manual acima (passos 1–5) já funciona hoje.
+
+## Criar utilizadores no painel (sem ir ao Supabase)
+Em **Configurações → Contas de administrador** pode ver, criar e remover utilizadores. Cada utilizador
+criado tem acesso completo ao painel. Para isto funcionar, crie **uma vez** a função `admin-users`
+no Supabase (ela guarda a chave secreta no servidor — nunca no site):
+1. Supabase → **Edge Functions** → **Deploy a new function** → **Via Editor**.
+2. Nome: `admin-users`. Cole todo o código de `supabase/functions/admin-users/index.ts`.
+3. Clique em **Deploy**.
+4. Se ao usar o painel aparecer o erro "Invalid JWT", abra as definições da função e desligue
+   **Verify JWT** (a função valida o login e a permissão de administrador por conta própria).
+
+## Ícones e ficheiros
+- Os ícones do site e do painel são SVG inline (sprite no início de cada página, `<use href="#i-nome">`).
+  Para usar um ícone novo, adicione um `<symbol id="i-nome">` ao sprite.
+- Nos formulários do admin, o botão nativo "Escolher arquivo" é substituído automaticamente por um
+  botão com ícone (`js/admin.js`).
 
 ## Teste
 - Abra `/admin/login.html`.

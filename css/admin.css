@@ -5,8 +5,83 @@
 .grid{display:grid;gap:18px}.stats-grid{grid-template-columns:repeat(4,1fr)}.stat-card,.panel,.form-card{background:var(--card);border:1px solid rgba(217,185,121,.14);border-radius:8px;padding:22px}.stat-card span{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.stat-card strong{display:block;font:700 30px "Playfair Display";margin-top:8px;color:var(--dourado2)}.section-title{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:35px 0 16px;flex-wrap:wrap}.section-title h2{font:700 20px "Playfair Display";margin:0}.muted{color:var(--muted)}.table-wrap{overflow:auto}.admin-table{width:100%;border-collapse:collapse;min-width:650px}.admin-table th,.admin-table td{text-align:left;padding:14px;border-bottom:1px solid rgba(217,185,121,.12);font-size:13px}.admin-table th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.thumb{width:54px;height:44px;object-fit:cover;border-radius:4px}.actions-row{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:6px;padding:11px 15px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn-primary{background:var(--dourado);color:#1c1608}.btn-secondary{background:#26332a;color:#fff;border:1px solid rgba(217,185,121,.18)}.btn-danger{background:rgba(239,107,107,.12);color:#ff9d9d;border:1px solid rgba(239,107,107,.3)}.btn-success{background:rgba(99,212,138,.12);color:#8cf0ac;border:1px solid rgba(99,212,138,.25)}.btn:disabled{opacity:.55;cursor:not-allowed}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700;color:#e7e4d8}.field input,.field textarea,.field select{width:100%;border:1px solid rgba(217,185,121,.2);background:#101810;color:#fff;border-radius:6px;padding:12px 13px;outline:0}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--dourado)}.field textarea{min-height:120px;resize:vertical}.check{display:flex;align-items:center;gap:9px;padding-top:27px}.check input{width:19px;height:19px;accent-color:var(--dourado)}.preview{width:150px;height:110px;border-radius:6px;object-fit:cover;border:1px solid rgba(217,185,121,.18);background:#101810}.file-row{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.file-row input[type=file]{max-width:100%}.hint{font-size:11px;color:var(--muted)}.empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed rgba(217,185,121,.18);border-radius:6px}
 .toast{position:fixed;right:22px;bottom:22px;z-index:100;background:#1c2921;border:1px solid rgba(217,185,121,.18);padding:13px 16px;border-radius:8px;box-shadow:0 14px 45px rgba(0,0,0,.4);max-width:340px}.toast.success{border-color:rgba(99,212,138,.4)}.toast.error{border-color:rgba(239,107,107,.4)}
-.auth-page{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 0,#1c260f 0,#151f18 45%)}.auth-card{width:min(440px,100%);background:#1c2921;border:1px solid rgba(182,144,60,.28);border-radius:10px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.4)}.auth-logo{display:block;width:190px;height:auto;max-height:70px;object-fit:contain;margin:0 auto 24px;background:#f7f4ee;padding:8px 12px;border-radius:6px}.auth-card h1{text-align:center;font:700 24px "Playfair Display";margin:0}.auth-card>p{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 25px}.password-wrap{position:relative}.password-wrap input{padding-right:82px}.toggle-pass{position:absolute;right:7px;top:7px;height:calc(100% - 14px);padding:0 10px;background:transparent;border:0;color:var(--dourado2);font-size:12px;font-weight:700}.auth-submit{width:100%;margin-top:18px;height:48px}.auth-error{min-height:20px;color:#ff9d9d;font-size:12px;margin-top:12px}.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.auth-back{text-align:center;display:block;color:var(--muted);font-size:12px;margin-top:20px}
+.auth-page{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 0,#1c260f 0,#151f18 45%)}.auth-card{width:min(440px,100%);background:#1c2921;border:1px solid rgba(182,144,60,.28);border-radius:10px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.4)}.auth-logo{display:block;width:190px;height:auto;max-height:70px;object-fit:contain;margin:0 auto 24px;background:#f7f4ee;padding:8px 12px;border-radius:6px}.auth-card h1{text-align:center;font:700 24px "Playfair Display";margin:0}.auth-card>p{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 25px}.password-wrap{position:relative}.password-wrap input{padding-right:82px}.toggle-pass{position:absolute;right:7px;top:7px;height:calc(100% - 14px);padding:0 10px;background:transparent;border:0;color:var(--dourado2);font-size:12px;font-weight:700}.auth-submit{width:100%;margin-top:18px;height:48px}.auth-error{min-height:20px;color:#ff9d9d;font-size:12px;margin-top:12px}.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.auth-back{text-align:center;display:block;padding:12px 0;color:var(--muted);font-size:12px;margin-top:20px}
 .upload-progress{margin-top:10px;height:6px;border-radius:3px;background:#101810;overflow:hidden;display:none}.upload-progress i{display:block;height:100%;background:var(--dourado);width:0%;transition:.2s}
 @media(max-width:1000px){.stats-grid{grid-template-columns:1fr 1fr}.admin-sidebar{width:230px}.admin-main{margin-left:230px}}
-@media(max-width:760px){.admin-sidebar{transform:translateX(-100%);transition:.25s;width:270px;box-shadow:15px 0 50px rgba(0,0,0,.4)}.admin-sidebar.open{transform:translateX(0)}.admin-main{margin-left:0}.admin-topbar{padding:0 16px;gap:12px}.mobile-menu{display:block}.sidebar-close{display:flex;align-items:center;justify-content:center;position:absolute;top:20px;right:16px;width:36px;height:36px;border-radius:6px;border:1px solid rgba(217,185,121,.18);background:transparent;color:#fff;font-size:17px;cursor:pointer;z-index:1}.admin-content{padding:20px 16px}.stats-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.section-title{align-items:flex-start}.section-title .btn{white-space:nowrap}}
+@media(max-width:760px){.admin-sidebar{transform:translateX(-100%);transition:.25s;width:270px;box-shadow:15px 0 50px rgba(0,0,0,.4)}.admin-sidebar.open{transform:translateX(0)}.admin-main{margin-left:0}.admin-topbar{padding:0 16px;gap:12px}.mobile-menu{display:inline-flex;align-items:center;justify-content:center}.sidebar-close{display:flex;align-items:center;justify-content:center;position:absolute;top:20px;right:16px;width:36px;height:36px;border-radius:6px;border:1px solid rgba(217,185,121,.18);background:transparent;color:#fff;font-size:17px;cursor:pointer;z-index:1}.admin-content{padding:20px 16px}.stats-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.section-title{align-items:flex-start}.section-title .btn{white-space:nowrap}}
 @media(max-width:480px){.stats-grid{grid-template-columns:1fr}.stat-card{padding:18px}.admin-content{padding:17px 13px}.form-card,.panel{padding:16px}.auth-card{padding:24px 19px}}
+/* Ícones SVG (substituem emojis e glifos de texto) */
+.icon{width:1.15em;height:1.15em;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em}
+.icon-fill{fill:currentColor;stroke-width:1}
+.icon-star{color:var(--dourado2)}
+.admin-nav a .icon,.admin-logout .icon{width:19px;height:19px;vertical-align:middle;opacity:.9}
+.admin-nav a.active .icon,.admin-nav a:hover .icon{color:var(--dourado2);opacity:1}
+.btn .icon{width:1.2em;height:1.2em;vertical-align:middle}
+.sidebar-close .icon,.mobile-menu .icon{width:20px;height:20px;vertical-align:middle}
+.auth-back .icon,#backToLogin .icon{width:1em;height:1em;vertical-align:-.15em;margin-right:4px}
+
+/* Seletor de ficheiro (substitui o botão "Escolher arquivo" do navegador) */
+.file-picker{position:relative;display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 260px}
+.field .file-picker input[type=file],.file-picker input[type=file]{position:absolute;width:1px;height:1px;padding:0;margin:0;border:0;opacity:0;overflow:hidden;clip:rect(0 0 0 0);pointer-events:none}
+.file-btn{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:6px;border:1px dashed rgba(217,185,121,.5);background:rgba(182,144,60,.08);color:var(--dourado2);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,color .2s}
+.file-btn .icon{width:18px;height:18px;vertical-align:middle}
+.file-btn:hover,.file-picker input[type=file]:focus-visible+.file-btn{background:rgba(182,144,60,.18);border-color:var(--dourado);color:#f1dfae}
+.file-name{min-width:0;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-picker.has-file .file-name{color:var(--creme)}
+
+/* Contas de administrador */
+.subtitle{font:700 16px "Playfair Display";margin:0 0 14px}
+.divider{border:0;border-top:1px solid rgba(217,185,121,.14);margin:26px 0}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(182,144,60,.16);color:var(--dourado2);margin-left:8px;vertical-align:middle}
+.pass-row{display:flex;gap:8px}.pass-row input{flex:1;min-width:0}
+.callout{border:1px solid rgba(217,185,121,.3);background:rgba(182,144,60,.07);border-radius:8px;padding:16px 18px;font-size:13px;color:#e7e4d8}
+.callout code,.panel code{background:#101810;border:1px solid rgba(217,185,121,.16);padding:1px 6px;border-radius:4px;font-size:12px}
+.callout ol{margin:10px 0 0;padding-left:20px;display:grid;gap:6px}
+
+/* ============================================================
+   Responsivo — painel administrativo
+   ============================================================ */
+.admin-topbar>div:first-child{min-width:0;flex:1 1 auto}
+.admin-topbar>div:first-child>div{min-width:0}
+.admin-topbar h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-topbar small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-topbar>.btn{flex:none}
+.sidebar-backdrop{display:none}
+@media(max-width:760px){
+  .sidebar-backdrop{display:block;position:fixed;inset:0;z-index:19;background:rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s linear .25s}
+  .sidebar-backdrop.show{opacity:1;visibility:visible;transition:opacity .25s}
+  .admin-sidebar{overflow-y:auto}
+  .admin-topbar h1{font-size:19px}
+  .admin-topbar>.btn{padding:10px 12px}
+  .field input,.field textarea,.field select{font-size:16px}
+  .btn{min-height:44px}
+  .sidebar-close{width:44px;height:44px}
+  .toggle-pass{min-width:64px;top:3px;height:calc(100% - 6px)}
+  .file-btn{min-height:44px}
+
+  /* tabelas viram cartões: tudo visível sem rolar para o lado */
+  .admin-table{min-width:0!important}
+  .admin-table thead{display:none}
+  .admin-table,.admin-table tbody,.admin-table tr,.admin-table td{display:block;width:100%}
+  .admin-table tr{padding:14px 0;border-bottom:1px solid rgba(217,185,121,.16)}
+  .admin-table tr:last-child{border-bottom:0}
+  .admin-table td{border:0;padding:5px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:right;font-size:13px}
+  .admin-table td::before{content:attr(data-label);flex:none;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;text-align:left}
+  .admin-table td:first-child{display:block;text-align:left;padding-bottom:8px;overflow-wrap:anywhere}
+  .admin-table td:first-child::before,.admin-table td:not([data-label])::before{display:none}
+  .admin-table td[data-label="Ações"]{justify-content:flex-start;padding-top:10px}
+  .admin-table td[data-label="Ações"]::before{display:none}
+  .admin-table td[colspan]{display:block;text-align:left}
+  .admin-table .actions-row{width:100%}
+  .admin-table .actions-row .btn{flex:1 1 0}
+}
+@media(max-width:480px){
+  .pass-row{flex-wrap:wrap}
+  .pass-row input{flex:1 1 100%}
+  .pass-row .btn{flex:1}
+  .file-picker{flex-basis:100%}
+}
+@media(max-height:520px) and (orientation:landscape){
+  .admin-sidebar{padding:14px 16px}.admin-logo{margin-bottom:12px;max-height:44px}.admin-nav a,.admin-logout{padding:9px 12px}
+}
+

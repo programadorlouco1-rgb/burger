@@ -17,9 +17,9 @@
 </aside>
 <main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu"><svg class='icon' aria-hidden='true'><use href='#i-menu'/></svg></button><div><h1>Vídeos</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site <svg class='icon' aria-hidden='true'><use href='#i-external'/></svg></a></header>
 <div class="admin-content">
-<div class="panel" style="margin-bottom:22px"><p class="muted">Esta secção existe só aqui no admin — não aparece no menu do site público. Os vídeos são descobertos pelos visitantes dentro dos móveis, dos projetos e do destaque na home. <br><br>Para publicar um vídeo: 1) faça o upload do ficheiro para o <strong>Cloudflare Stream</strong> (dashboard da Cloudflare, ou pelo telemóvel via cloudflarestream.com) e copie o <strong>UID do vídeo</strong>; 2) cole esse UID aqui em baixo. (Também aceita um link direto do YouTube/Vimeo, se preferir usar isso em vez do Cloudflare Stream.)</p></div>
+<div class="panel" style="margin-bottom:22px"><p class="muted">Esta secção existe só aqui no admin — não aparece no menu do site público. Os vídeos são descobertos pelos visitantes dentro dos móveis, dos projetos, no carrossel de destaques da home e na página com todos os vídeos publicados. <br><br>Para publicar um vídeo: 1) faça o upload do ficheiro para o <strong>Cloudflare Stream</strong> (dashboard da Cloudflare, ou pelo telemóvel via cloudflarestream.com) e copie o <strong>UID do vídeo</strong>; 2) cole esse UID aqui em baixo. (Também aceita um link direto do YouTube/Vimeo, se preferir usar isso em vez do Cloudflare Stream.)</p></div>
 
-<div class="section-title" style="margin-top:0"><div><h2>Vídeos</h2><p class="muted">Apenas um vídeo pode estar em destaque na home de cada vez.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar vídeo</button></div>
+<div class="section-title" style="margin-top:0"><div><h2>Vídeos</h2><p class="muted">Os vídeos marcados como destaque aparecem no carrossel da home. Pode marcar quantos quiser; todos os vídeos publicados ficam na página “Ver todos os vídeos”.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar vídeo</button></div>
 
 <div class="form-card" id="videoFormCard" hidden><form id="videoForm" class="form-grid">
 <input type="hidden" id="id"><input type="hidden" id="oldThumb">
@@ -73,8 +73,6 @@ let error,savedId=id.value;
 if(id.value){({error}=await designeSupabase.from("videos").update(payload).eq("id",id.value))}
 else{const res=await designeSupabase.from("videos").insert(payload).select("id").single();error=res.error;savedId=res.data?.id}
 if(error)throw error;
-// Garante que só este vídeo fica em destaque, retirando o destaque dos restantes.
-if(featured.checked && savedId){await designeSupabase.from("videos").update({destaque:false}).neq("id",savedId)}
 adminToast("Vídeo publicado com sucesso.");reset();load()
 }catch(e){adminToast(e.message||"Erro ao guardar vídeo.","error")}finally{save.disabled=false;save.textContent="Publicar"}};
 

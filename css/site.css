@@ -545,3 +545,56 @@ iframe,svg,canvas,video{max-width:100%}
   .back-top{bottom:max(24px,env(safe-area-inset-bottom))}
   footer{padding-bottom:max(40px,env(safe-area-inset-bottom))}
 }
+
+/* ============================================================
+   Vídeos em destaque — carrossel da home
+   ============================================================ */
+.video-feature .container{padding-top:clamp(56px,9vw,110px);padding-bottom:clamp(56px,9vw,110px)}
+.video-carousel{position:relative}
+.vc-viewport{overflow:hidden;touch-action:pan-y}
+.vc-track{display:flex;transition:transform var(--dur-slower) var(--ease-out);will-change:transform}
+.vc-slide{flex:0 0 100%;min-width:0;display:flex;align-items:center}
+.vc-slide .video-feature-grid{width:100%}
+.video-thumb-wrap{cursor:pointer}
+.video-feature-label[data-play]{cursor:pointer;width:fit-content}
+.video-feature-label[data-play]:hover{color:#f0d9a3}
+.vc-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:clamp(28px,5vw,44px)}
+.vc-controls{display:flex;align-items:center;gap:16px}
+.vc-controls[hidden]{display:none}
+.vc-arrow{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid rgba(217,185,121,.5);background:rgba(182,144,60,.08);color:var(--dourado2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background var(--dur-base) var(--ease),color var(--dur-base) var(--ease),border-color var(--dur-base) var(--ease),transform var(--dur-fast) var(--ease)}
+.vc-arrow .icon{width:20px;height:20px}
+@media(hover:hover){.vc-arrow:hover{background:var(--dourado);border-color:var(--dourado);color:#1c1608}}
+.vc-arrow:active{transform:scale(.93)}
+.vc-dots{display:flex;align-items:center;gap:8px}
+.vc-dot{position:relative;width:8px;height:8px;padding:0;border:0;border-radius:var(--radius-full);background:rgba(217,185,121,.3);cursor:pointer;transition:width var(--dur-base) var(--ease),background var(--dur-base) var(--ease)}
+.vc-dot:after{content:"";position:absolute;inset:-18px -4px}
+.vc-dot:hover{background:rgba(217,185,121,.6)}
+.vc-dot[aria-current="true"]{width:26px;background:var(--dourado)}
+.vc-all{margin-left:auto}
+@media(max-width:700px){
+  .vc-footer{flex-direction:column;align-items:stretch;gap:22px}
+  .vc-controls{justify-content:center}
+  .vc-all{margin-left:0;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){.vc-track{transition:none}}
+
+/* ============================================================
+   Página "Todos os vídeos"
+   ============================================================ */
+.videos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5);margin-top:clamp(28px,6vw,48px)}
+.videos-grid>*{min-width:0}
+.video-card{background:linear-gradient(180deg,#1b2720,#161f19);overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--linha);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);cursor:pointer;transition:transform var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease),border-color var(--dur-base) var(--ease)}
+.video-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:rgba(217,185,121,.5)}
+.video-card .video-thumb-wrap{border-radius:0;box-shadow:none}
+.video-card .video-thumb-wrap img{height:auto;aspect-ratio:16/10;object-fit:cover}
+.video-card:hover .video-thumb-wrap img{transform:scale(1.04)}
+.video-card:hover .play-btn{transform:translate(-50%,-50%) scale(1.08);background:var(--dourado)}
+.video-card:hover .play-btn svg{fill:#1c1608}
+.video-card .play-btn{width:60px;height:60px}
+.video-card .play-btn svg{width:20px;height:20px;margin-left:3px}
+.video-card-body{padding:var(--sp-6);display:flex;flex-direction:column;flex:1}
+.video-card h3{font-size:20px;color:#f3f1e9;margin-top:var(--sp-3)}
+.video-card p{color:#a8a598;font-size:13px;margin-top:9px;font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:900px){.videos-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.videos-grid{grid-template-columns:1fr}}
+

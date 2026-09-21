@@ -119,17 +119,18 @@
 </section>
 
 <section class="video-feature" id="featuredVideoSection" hidden>
-  <div class="container" style="padding:110px 0">
-    <div class="video-feature-grid">
-      <div class="video-thumb-wrap" id="featuredVideoThumb">
-        <img src="assets/hero.jpg" loading="lazy" alt="Vídeo em destaque — DESIGNE decoração">
-        <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+  <div class="container">
+    <div class="video-carousel" id="videoCarousel" role="region" aria-roledescription="carrossel" aria-label="Vídeos em destaque">
+      <div class="vc-viewport" id="videoCarouselViewport">
+        <div class="vc-track" id="featuredVideoTrack"></div>
       </div>
-      <div>
-        <div class="eyebrow">Em vídeo</div>
-        <h2 id="featuredVideoTitle">Veja o nosso trabalho ganhar vida</h2>
-        <p id="featuredVideoDesc">Conheça alguns dos nossos projetos e veja de perto os detalhes, acabamentos e soluções que transformam cada espaço.</p>
-        <div class="video-feature-label"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Ver projeto em vídeo</div>
+      <div class="vc-footer">
+        <div class="vc-controls" id="videoCarouselControls" hidden>
+          <button class="vc-arrow" id="vcPrev" type="button" aria-label="Vídeo anterior"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <div class="vc-dots" id="vcDots"></div>
+          <button class="vc-arrow" id="vcNext" type="button" aria-label="Próximo vídeo"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <a class="btn btn-outline vc-all" href="videos.html">Ver todos os vídeos <svg class='icon' aria-hidden='true'><use href='#i-external'/></svg></a>
       </div>
     </div>
   </div>

@@ -12,7 +12,7 @@ projeto WANDE fornecido (mesma arquitetura: HTML/CSS/JS puro + Supabase, sem fra
   e botão de vídeo opcional por móvel.
 - **Projetos** (`projetos.html`) com galeria de fotos adicionais por projeto e vídeo opcional —
   ao clicar num projeto abre um modal com capa, descrição, fotos e o vídeo (quando existir).
-- Bloco "Veja o nosso trabalho ganhar vida" na home, com o vídeo marcado como destaque no admin.
+- Carrossel "Veja o nosso trabalho ganhar vida" na home, com todos os vídeos marcados como destaque no admin (pode ser mais de um), e botão "Ver todos os vídeos" que leva a `videos.html` (todos os vídeos publicados).
 - Painel administrativo em `/admin`: Dashboard, Móveis, Projetos (+ fotos), Vídeos, Serviços,
   Configurações — tudo protegido por login e RLS no Supabase.
 - WhatsApp (+244 937 283 518), Facebook e Google Maps já ligados, e editáveis em
@@ -24,6 +24,7 @@ projeto WANDE fornecido (mesma arquitetura: HTML/CSS/JS puro + Supabase, sem fra
 /index.html            (home)
 /moveis.html            (catálogo completo)
 /projetos.html          (portfólio completo)
+/videos.html            (todos os vídeos publicados)
 /assets/...
 /admin/
   login.html

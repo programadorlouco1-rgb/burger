@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Configurações — DESIGNE decoração Admin</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+<img class="admin-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<button class="sidebar-close" aria-label="Fechar menu">✕</button>
+<nav class="admin-nav">
+<a href="index.html" data-page="dashboard">📊 <span>Dashboard</span></a>
+<a href="moveis.html" data-page="moveis">🪑 <span>Móveis</span></a>
+<a href="projetos.html" data-page="projetos">🏠 <span>Projetos</span></a>
+<a href="videos.html" data-page="videos">🎥 <span>Vídeos</span></a>
+<a href="servicos.html" data-page="servicos">🛠️ <span>Serviços</span></a>
+<a href="configuracoes.html" data-page="configuracoes">⚙️ <span>Configurações</span></a>
+</nav><button class="admin-logout">🚪 <span>Sair</span></button>
+</aside>
+<main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu">☰</button><div><h1>Configurações</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site ↗</a></header>
+<div class="admin-content">
+<div class="section-title" style="margin-top:0"><h2>Dados da empresa</h2><p class="muted">Estas informações atualizam automaticamente o telefone, WhatsApp, Facebook, localização e textos da home em todo o site.</p></div>
+<div class="panel"><form id="configForm" class="form-grid">
+<div class="field"><label>Nome da empresa<input id="nomeEmpresa" required></label></div>
+<div class="field"><label>Slogan<input id="slogan"></label></div>
+<div class="field"><label>Telefone (com indicativo)<input id="telefone" placeholder="+244 937 283 518"></label></div>
+<div class="field"><label>WhatsApp (só números, com indicativo)<input id="whatsapp" placeholder="244937283518"></label></div>
+<div class="field"><label>Facebook (link completo)<input id="facebook" placeholder="https://www.facebook.com/..."></label></div>
+<div class="field"><label>Endereço<input id="endereco" placeholder="Luanda, Angola"></label></div>
+<div class="field full"><label>Link do Google Maps<input id="mapsLink" placeholder="https://goo.gl/maps/..."></label></div>
+<div class="field full"><label>Título do Hero (primeira frase do site)<input id="heroTitulo"></label></div>
+<div class="field full"><label>Subtítulo do Hero<textarea id="heroSubtitulo"></textarea></label></div>
+<div class="field full"><label>Título da secção "Sobre"<input id="sobreTitulo"></label></div>
+<div class="field full"><label>Texto da secção "Sobre"<textarea id="sobreTexto"></textarea></label></div>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Guardar configurações</button></div></div>
+</form></div>
+
+<div class="section-title"><h2>Armazenamento</h2></div>
+<div class="panel"><p class="muted">Os buckets <code>moveis</code>, <code>projetos</code>, <code>servicos</code> e <code>videos</code> (thumbnails) são públicos para leitura das imagens e protegidos para escrita/eliminação por administradores.</p></div>
+
+<div class="section-title"><h2>Contas de administrador</h2></div>
+<div class="panel"><p class="muted">Para adicionar um novo administrador: crie o utilizador em Supabase → Authentication → Users, copie o UUID e execute no SQL Editor:<br><br><code>insert into public.admin_users(user_id) values ('UUID-DO-UTILIZADOR');</code></p></div>
+</div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/video-utils.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("configuracoes");
+const form=document.getElementById("configForm"),save=document.getElementById("save");
+async function load(){
+  const {data,error}=await designeSupabase.from("site_config").select("*").eq("id",1).maybeSingle();
+  if(error||!data){adminToast("Não foi possível carregar as configurações.","error");return}
+  nomeEmpresa.value=data.nome_empresa||"";slogan.value=data.slogan||"";telefone.value=data.telefone||"";whatsapp.value=data.whatsapp||"";facebook.value=data.facebook||"";endereco.value=data.endereco||"";mapsLink.value=data.maps_link||"";
+  heroTitulo.value=data.hero_titulo||"";heroSubtitulo.value=data.hero_subtitulo||"";sobreTitulo.value=data.sobre_titulo||"";sobreTexto.value=data.sobre_texto||"";
+}
+form.onsubmit=async e=>{e.preventDefault();save.disabled=true;save.textContent="A guardar…";
+try{
+  const payload={nome_empresa:nomeEmpresa.value.trim(),slogan:slogan.value.trim(),telefone:telefone.value.trim(),whatsapp:whatsapp.value.replace(/\D/g,""),facebook:facebook.value.trim(),endereco:endereco.value.trim(),maps_link:mapsLink.value.trim(),hero_titulo:heroTitulo.value.trim(),hero_subtitulo:heroSubtitulo.value.trim(),sobre_titulo:sobreTitulo.value.trim(),sobre_texto:sobreTexto.value.trim(),updated_at:new Date().toISOString()};
+  const {error}=await designeSupabase.from("site_config").update(payload).eq("id",1);
+  if(error)throw error;
+  adminToast("Configurações guardadas com sucesso.");
+}catch(e){adminToast(e.message||"Erro ao guardar configurações.","error")}
+finally{save.disabled=false;save.textContent="Guardar configurações"}};
+load();
+})();
+</script>
+</body></html>

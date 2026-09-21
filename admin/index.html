@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Dashboard — DESIGNE decoração Admin</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+<img class="admin-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<button class="sidebar-close" aria-label="Fechar menu">✕</button>
+<nav class="admin-nav">
+<a href="index.html" data-page="dashboard">📊 <span>Dashboard</span></a>
+<a href="moveis.html" data-page="moveis">🪑 <span>Móveis</span></a>
+<a href="projetos.html" data-page="projetos">🏠 <span>Projetos</span></a>
+<a href="videos.html" data-page="videos">🎥 <span>Vídeos</span></a>
+<a href="servicos.html" data-page="servicos">🛠️ <span>Serviços</span></a>
+<a href="configuracoes.html" data-page="configuracoes">⚙️ <span>Configurações</span></a>
+</nav><button class="admin-logout">🚪 <span>Sair</span></button>
+</aside>
+<main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu">☰</button><div><h1>Dashboard</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site ↗</a></header>
+<div class="admin-content"><div class="grid stats-grid">
+<div class="stat-card"><span>Móveis publicados</span><strong id="totalMoveis">—</strong></div>
+<div class="stat-card"><span>Projetos publicados</span><strong id="totalProjetos">—</strong></div>
+<div class="stat-card"><span>Vídeos</span><strong id="totalVideos">—</strong></div>
+<div class="stat-card"><span>Serviços</span><strong id="totalServicos">—</strong></div>
+</div>
+<div class="section-title"><h2>Projetos adicionados recentemente</h2><a class="btn btn-primary" href="projetos.html">Adicionar projeto +</a></div>
+<div class="panel"><div id="recentProjetos" class="grid"></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/video-utils.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("dashboard");
+const {data:mv}=await designeSupabase.from("moveis").select("id");
+const {data:pj,error:pje}=await designeSupabase.from("projetos").select("id,titulo,categoria,imagem_capa_url,created_at").order("created_at",{ascending:false});
+const {data:vd}=await designeSupabase.from("videos").select("id");
+const {data:sv}=await designeSupabase.from("servicos").select("id");
+if(pje){adminToast("Não foi possível carregar alguns dados.","error");return}
+document.getElementById("totalMoveis").textContent=mv?.length??0;
+document.getElementById("totalProjetos").textContent=pj?.length??0;
+document.getElementById("totalVideos").textContent=vd?.length??0;
+document.getElementById("totalServicos").textContent=sv?.length??0;
+const recent=(pj||[]).slice(0,5);
+document.getElementById("recentProjetos").innerHTML=recent.length?recent.map(x=>`<div style="display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(217,185,121,.12);padding:12px 0"><img class="thumb" src="${escapeHtml(x.imagem_capa_url||"../assets/hero.jpg")}"><div><strong>${escapeHtml(x.titulo)}</strong><div class="muted">${escapeHtml(x.categoria||"Sem categoria")} · ${new Date(x.created_at).toLocaleDateString("pt-AO")}</div></div></div>`).join(""):'<div class="empty">Ainda não há projetos cadastrados.</div>';
+})();
+</script>
+</body></html>

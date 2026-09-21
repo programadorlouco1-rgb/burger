@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Definir nova senha — DESIGNE decoração</title><link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head>
+<body class="auth-page"><main class="auth-card">
+<img class="auth-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<h1>Definir nova senha</h1><p id="intro">Escolha uma nova senha para a sua conta de administrador.</p>
+<form id="resetForm">
+<div class="field"><label for="password1">Nova senha</label><div class="password-wrap"><input id="password1" type="password" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres"><button class="toggle-pass" type="button" id="toggle1">Mostrar</button></div></div>
+<div class="field" style="margin-top:14px"><label for="password2">Confirmar nova senha</label><div class="password-wrap"><input id="password2" type="password" autocomplete="new-password" required minlength="6" placeholder="Repita a senha"><button class="toggle-pass" type="button" id="toggle2">Mostrar</button></div></div>
+<div class="auth-error" id="error"></div><div class="auth-error" id="ok" style="color:#4ade80"></div>
+<button class="btn btn-primary auth-submit" id="submit" type="submit">Guardar nova senha</button>
+</form>
+<a class="auth-back" href="login.html">← Voltar ao login</a>
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script>
+<script>
+const form=document.getElementById("resetForm"),err=document.getElementById("error"),ok=document.getElementById("ok"),btn=document.getElementById("submit"),intro=document.getElementById("intro");
+document.getElementById("toggle1").onclick=()=>{const p=document.getElementById("password1");p.type=p.type==="password"?"text":"password";document.getElementById("toggle1").textContent=p.type==="password"?"Mostrar":"Ocultar"};
+document.getElementById("toggle2").onclick=()=>{const p=document.getElementById("password2");p.type=p.type==="password"?"text":"password";document.getElementById("toggle2").textContent=p.type==="password"?"Mostrar":"Ocultar"};
+
+if(!designeSupabase){err.textContent="Configure primeiro o Supabase em js/supabase.js.";form.hidden=true}
+else{
+  designeSupabase.auth.onAuthStateChange((event)=>{ if(event==="PASSWORD_RECOVERY"){ intro.textContent="Link confirmado — escolha a sua nova senha."; } });
+}
+
+form.onsubmit=async e=>{
+  e.preventDefault(); err.textContent=""; ok.textContent="";
+  const p1=document.getElementById("password1").value, p2=document.getElementById("password2").value;
+  if(p1!==p2){ err.textContent="As senhas não coincidem."; return }
+  const {data:{session}}=await designeSupabase.auth.getSession();
+  if(!session){ err.textContent="Este link é inválido ou já expirou. Solicite um novo em \"Esqueceu a sua palavra-passe?\" no login."; return }
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> A guardar…';
+  const {error}=await designeSupabase.auth.updateUser({password:p1});
+  btn.disabled=false; btn.textContent="Guardar nova senha";
+  if(error){ err.textContent="Não foi possível atualizar a senha: "+error.message; return }
+  form.hidden=true;
+  ok.textContent="Senha atualizada com sucesso! A redirecionar para o login…";
+  await designeSupabase.auth.signOut();
+  setTimeout(()=>location.href="login.html",2200);
+};
+</script></body></html>

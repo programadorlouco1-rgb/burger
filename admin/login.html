@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Área Administrativa — DESIGNE decoração</title><link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head>
+<body class="auth-page"><main class="auth-card">
+<img class="auth-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<h1>Área Administrativa</h1><p>Aceda ao painel para gerir o conteúdo do site.</p>
+<form id="loginForm">
+<div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required placeholder="seu@email.com"></div>
+<div class="field" style="margin-top:14px"><label for="password">Senha</label><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" required placeholder="A sua senha"><button class="toggle-pass" type="button" id="toggle">Mostrar</button></div></div>
+<div class="auth-error" id="error"></div><button class="btn btn-primary auth-submit" id="submit" type="submit">Entrar</button>
+<button type="button" id="forgotLink" style="display:block;margin:16px auto 0;background:none;border:0;color:var(--dourado,#b6903c);font-size:13px;font-weight:600;cursor:pointer">Esqueceu a sua palavra-passe?</button>
+</form>
+<form id="forgotForm" hidden>
+<div class="field"><label for="forgotEmail">E-mail da conta de administrador</label><input id="forgotEmail" type="email" required placeholder="seu@email.com"></div>
+<p style="font-size:12px;color:#9a9a8c;margin-top:8px">Vamos enviar um link de recuperação para esse e-mail — abra-o para definir uma nova senha.</p>
+<div class="auth-error" id="forgotError"></div>
+<div class="auth-error" id="forgotOk" style="color:#4ade80"></div>
+<button class="btn btn-primary auth-submit" id="forgotSubmit" type="submit">Enviar link de recuperação</button>
+<button type="button" id="backToLogin" style="display:block;margin:16px auto 0;background:none;border:0;color:#9a9a8c;font-size:13px;font-weight:600;cursor:pointer">← Voltar ao login</button>
+</form>
+<a class="auth-back" href="../index.html">← Voltar ao site</a>
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/auth.js"></script>
+<script>
+const form=document.getElementById("loginForm"),err=document.getElementById("error"),btn=document.getElementById("submit");
+document.getElementById("toggle").onclick=()=>{const p=document.getElementById("password");p.type=p.type==="password"?"text":"password";document.getElementById("toggle").textContent=p.type==="password"?"Mostrar":"Ocultar"};
+form.onsubmit=async e=>{e.preventDefault();err.textContent="";if(!designeSupabase){err.textContent="Configure primeiro o Supabase em js/supabase.js.";return}btn.disabled=true;btn.innerHTML='<span class="spinner"></span> A entrar…';
+const {error}=await designeSupabase.auth.signInWithPassword({email:email.value.trim(),password:password.value});if(error){err.textContent="E-mail ou senha inválidos, ou acesso não autorizado.";btn.disabled=false;btn.textContent="Entrar";return}
+const ok=await designeIsAdmin();if(!ok){await designeSupabase.auth.signOut();err.textContent="Este utilizador não está autorizado como administrador.";btn.disabled=false;btn.textContent="Entrar";return}location.href="index.html"};
+
+const forgotLink=document.getElementById("forgotLink"),forgotForm=document.getElementById("forgotForm"),backToLogin=document.getElementById("backToLogin");
+const forgotError=document.getElementById("forgotError"),forgotOk=document.getElementById("forgotOk"),forgotSubmit=document.getElementById("forgotSubmit");
+forgotLink.onclick=()=>{form.hidden=true;forgotLink.hidden=true;forgotForm.hidden=false;document.getElementById("forgotEmail").value=email.value.trim()};
+backToLogin.onclick=()=>{forgotForm.hidden=true;form.hidden=false;forgotLink.hidden=false;forgotError.textContent="";forgotOk.textContent=""};
+forgotForm.onsubmit=async e=>{e.preventDefault();forgotError.textContent="";forgotOk.textContent="";
+if(!designeSupabase){forgotError.textContent="Configure primeiro o Supabase em js/supabase.js.";return}
+forgotSubmit.disabled=true;forgotSubmit.innerHTML='<span class="spinner"></span> A enviar…';
+const redirectTo=location.origin+location.pathname.replace(/login\.html$/,"redefinir-senha.html");
+const {error}=await designeSupabase.auth.resetPasswordForEmail(document.getElementById("forgotEmail").value.trim(),{redirectTo});
+forgotSubmit.disabled=false;forgotSubmit.textContent="Enviar link de recuperação";
+if(error){forgotError.textContent="Não foi possível enviar o e-mail. Tente novamente.";return}
+forgotOk.textContent="Se existir uma conta com este e-mail, o link de recuperação foi enviado. Verifique também o spam."};
+</script></body></html>

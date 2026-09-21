@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Vídeos — DESIGNE decoração Admin</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+<img class="admin-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<button class="sidebar-close" aria-label="Fechar menu">✕</button>
+<nav class="admin-nav">
+<a href="index.html" data-page="dashboard">📊 <span>Dashboard</span></a>
+<a href="moveis.html" data-page="moveis">🪑 <span>Móveis</span></a>
+<a href="projetos.html" data-page="projetos">🏠 <span>Projetos</span></a>
+<a href="videos.html" data-page="videos">🎥 <span>Vídeos</span></a>
+<a href="servicos.html" data-page="servicos">🛠️ <span>Serviços</span></a>
+<a href="configuracoes.html" data-page="configuracoes">⚙️ <span>Configurações</span></a>
+</nav><button class="admin-logout">🚪 <span>Sair</span></button>
+</aside>
+<main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu">☰</button><div><h1>Vídeos</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site ↗</a></header>
+<div class="admin-content">
+<div class="panel" style="margin-bottom:22px"><p class="muted">Esta secção existe só aqui no admin — não aparece no menu do site público. Os vídeos são descobertos pelos visitantes dentro dos móveis, dos projetos e do destaque na home. <br><br>Para publicar um vídeo: 1) faça o upload do ficheiro para o <strong>Cloudflare Stream</strong> (dashboard da Cloudflare, ou pelo telemóvel via cloudflarestream.com) e copie o <strong>UID do vídeo</strong>; 2) cole esse UID aqui em baixo. (Também aceita um link direto do YouTube/Vimeo, se preferir usar isso em vez do Cloudflare Stream.)</p></div>
+
+<div class="section-title" style="margin-top:0"><div><h2>Vídeos</h2><p class="muted">Apenas um vídeo pode estar em destaque na home de cada vez.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar vídeo</button></div>
+
+<div class="form-card" id="videoFormCard" hidden><form id="videoForm" class="form-grid">
+<input type="hidden" id="id"><input type="hidden" id="oldThumb">
+<div class="field"><label>Título<input id="title" required maxlength="120" placeholder="Ex.: Cozinha Planejada Moderna — vídeo"></label></div>
+<div class="field"><label>Categoria<input id="category" maxlength="80"></label></div>
+<div class="field full"><label>Descrição<textarea id="description" maxlength="500"></textarea></label></div>
+<div class="field full"><label>UID do Cloudflare Stream (ou URL de embed)<input id="videoUid" required placeholder="Ex.: 31c9291ab4b7...   ou   https://youtube.com/watch?v=..."></label><span class="hint">Copie o UID a partir do dashboard do Cloudflare Stream depois do upload/processamento.</span></div>
+<div class="field full"><label>Thumbnail (capa do vídeo)</label><div class="file-row"><img class="preview" id="preview" src="../assets/hero.jpg" alt="Pré-visualização"><input id="thumbFile" type="file" accept="image/*"></div><span class="hint">Se não escolher uma thumbnail, é usada uma imagem padrão.</span></div>
+<div class="field"><label>Projeto relacionado (opcional)<select id="projetoId"><option value="">Nenhum</option></select></label></div>
+<div class="field"><label>Móvel relacionado (opcional)<select id="movelId"><option value="">Nenhum</option></select></label></div>
+<div style="display:flex;gap:22px;align-items:center">
+<label class="check" style="padding-top:0"><input id="active" type="checkbox" checked> Publicado</label>
+<label class="check" style="padding-top:0"><input id="featured" type="checkbox"> ⭐ Vídeo em destaque na home</label>
+</div>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Publicar</button><button class="btn btn-secondary" type="button" id="cancel">Cancelar</button></div></div>
+</form></div>
+
+<div class="panel" style="margin-top:20px"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Vídeo</th><th>Categoria</th><th>Estado</th><th>Destaque</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/video-utils.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("videos");
+const card=document.getElementById("videoFormCard"),form=document.getElementById("videoForm"),rows=document.getElementById("rows"),thumbFile=document.getElementById("thumbFile"),preview=document.getElementById("preview"),projetoId=document.getElementById("projetoId"),movelId=document.getElementById("movelId");
+
+async function loadOptions(){
+  const {data:pj}=await designeSupabase.from("projetos").select("id,titulo").order("titulo",{ascending:true});
+  const {data:mv}=await designeSupabase.from("moveis").select("id,nome").order("nome",{ascending:true});
+  projetoId.innerHTML='<option value="">Nenhum</option>'+(pj||[]).map(p=>`<option value="${p.id}">${escapeHtml(p.titulo)}</option>`).join("");
+  movelId.innerHTML='<option value="">Nenhum</option>'+(mv||[]).map(m=>`<option value="${m.id}">${escapeHtml(m.nome)}</option>`).join("");
+}
+
+function reset(){form.reset();id.value="";oldThumb.value="";preview.src="../assets/hero.jpg";active.checked=true;featured.checked=false;projetoId.value="";movelId.value="";card.hidden=true}
+
+async function load(){const {data,error}=await designeSupabase.from("videos").select("*").order("destaque",{ascending:false}).order("created_at",{ascending:false});if(error){adminToast(error.message,"error");return}
+rows.innerHTML=data.length?data.map(v=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><img class="thumb" src="${escapeHtml(v.thumbnail_url||"../assets/hero.jpg")}"><div><strong>${escapeHtml(v.titulo)}</strong><div class="muted">${escapeHtml(v.video_uid||"").slice(0,28)}</div></div></div></td><td>${escapeHtml(v.categoria||"")}</td><td>${v.ativo?'<span style="color:#8cf0ac">Publicado</span>':'<span class="muted">Oculto</span>'}</td><td>${v.destaque?"⭐ Sim":"—"}</td><td><div class="actions-row"><button class="btn btn-secondary edit" data-id="${v.id}">Editar</button><button class="btn btn-danger delete" data-id="${v.id}">Excluir</button></div></td></tr>`).join(""):'<tr><td colspan="5"><div class="empty">Ainda não há vídeos.</div></td></tr>';
+rows.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(b.dataset.id));rows.querySelectorAll(".delete").forEach(b=>b.onclick=()=>del(b.dataset.id))}
+
+async function edit(uid){const {data,error}=await designeSupabase.from("videos").select("*").eq("id",uid).single();if(error)return adminToast(error.message,"error");
+await loadOptions();
+id.value=data.id;oldThumb.value=data.thumbnail_url||"";title.value=data.titulo;description.value=data.descricao||"";category.value=data.categoria||"";videoUid.value=data.video_uid||"";active.checked=data.ativo;featured.checked=data.destaque;projetoId.value=data.projeto_id||"";movelId.value=data.movel_id||"";preview.src=data.thumbnail_url||"../assets/hero.jpg";
+card.hidden=false;scrollTo({top:0,behavior:"smooth"})}
+
+async function del(uid){if(!confirm("Excluir este vídeo? Os móveis/projetos associados deixarão de mostrar o vídeo."))return;const {data}=await designeSupabase.from("videos").select("thumbnail_url").eq("id",uid).single();const {error}=await designeSupabase.from("videos").delete().eq("id",uid);if(error)adminToast(error.message,"error");else{if(data?.thumbnail_url)deleteImageByUrl(data.thumbnail_url,"videos");adminToast("Vídeo excluído.");load()}}
+
+thumbFile.onchange=()=>{if(thumbFile.files[0])preview.src=URL.createObjectURL(thumbFile.files[0])};
+document.getElementById("newBtn").onclick=async()=>{form.reset();id.value="";oldThumb.value="";preview.src="../assets/hero.jpg";active.checked=true;featured.checked=false;await loadOptions();card.hidden=false;scrollTo({top:0,behavior:"smooth"})};
+document.getElementById("cancel").onclick=reset;
+
+form.onsubmit=async e=>{e.preventDefault();const save=document.getElementById("save");save.disabled=true;save.textContent="A publicar…";try{
+let thumbUrl=oldThumb.value;if(thumbFile.files[0])thumbUrl=await uploadImage(thumbFile.files[0],"videos","thumbnails");
+const payload={titulo:title.value.trim(),descricao:description.value.trim(),categoria:category.value.trim(),video_uid:videoUid.value.trim(),thumbnail_url:thumbUrl,projeto_id:projetoId.value||null,movel_id:movelId.value||null,ativo:active.checked,destaque:featured.checked,updated_at:new Date().toISOString()};
+let error,savedId=id.value;
+if(id.value){({error}=await designeSupabase.from("videos").update(payload).eq("id",id.value))}
+else{const res=await designeSupabase.from("videos").insert(payload).select("id").single();error=res.error;savedId=res.data?.id}
+if(error)throw error;
+// Garante que só este vídeo fica em destaque, retirando o destaque dos restantes.
+if(featured.checked && savedId){await designeSupabase.from("videos").update({destaque:false}).neq("id",savedId)}
+adminToast("Vídeo publicado com sucesso.");reset();load()
+}catch(e){adminToast(e.message||"Erro ao guardar vídeo.","error")}finally{save.disabled=false;save.textContent="Publicar"}};
+
+load();loadOptions();
+})();
+</script>
+</body></html>

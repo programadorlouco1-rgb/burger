@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Projetos — DESIGNE decoração Admin</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+<img class="admin-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<button class="sidebar-close" aria-label="Fechar menu">✕</button>
+<nav class="admin-nav">
+<a href="index.html" data-page="dashboard">📊 <span>Dashboard</span></a>
+<a href="moveis.html" data-page="moveis">🪑 <span>Móveis</span></a>
+<a href="projetos.html" data-page="projetos">🏠 <span>Projetos</span></a>
+<a href="videos.html" data-page="videos">🎥 <span>Vídeos</span></a>
+<a href="servicos.html" data-page="servicos">🛠️ <span>Serviços</span></a>
+<a href="configuracoes.html" data-page="configuracoes">⚙️ <span>Configurações</span></a>
+</nav><button class="admin-logout">🚪 <span>Sair</span></button>
+</aside>
+<main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu">☰</button><div><h1>Projetos</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site ↗</a></header>
+<div class="admin-content"><div class="section-title" style="margin-top:0"><div><h2>Projetos realizados</h2><p class="muted">Cada projeto pode ter uma capa, uma galeria de fotos adicionais e um vídeo associado.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar projeto</button></div>
+
+<div class="form-card" id="projectFormCard" hidden><form id="projectForm" class="form-grid">
+<input type="hidden" id="id"><input type="hidden" id="oldImage">
+<div class="field full"><label>Foto de capa</label><div class="file-row"><img class="preview" id="preview" src="../assets/hero.jpg" alt="Pré-visualização"><input id="image" type="file" accept="image/*" required></div></div>
+<div class="field"><label>Título<input id="title" required maxlength="120" placeholder="Ex.: Cozinha Planejada Moderna"></label></div>
+<div class="field"><label>Categoria<input id="category" maxlength="80" placeholder="Ex.: Cozinhas, Quartos, Painéis..."></label></div>
+<div class="field full"><label>Descrição<textarea id="description" maxlength="1000"></textarea></label></div>
+<div class="field"><label>Vídeo associado (opcional)<select id="videoId"><option value="">Nenhum</option></select></label><span class="hint">Gerido em 🎥 Vídeos.</span></div>
+<div style="display:flex;gap:22px;align-items:center">
+<label class="check" style="padding-top:0"><input id="active" type="checkbox" checked> Publicado</label>
+<label class="check" style="padding-top:0"><input id="featured" type="checkbox"> ⭐ Destaque</label>
+</div>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Publicar</button><button class="btn btn-secondary" type="button" id="cancel">Cancelar</button></div></div>
+</form>
+
+<div id="photosPanel" hidden style="margin-top:26px;padding-top:24px;border-top:1px solid rgba(217,185,121,.14)">
+  <div class="section-title" style="margin:0 0 14px"><h2 style="font-size:16px">Fotos adicionais deste projeto</h2></div>
+  <div class="file-row"><input id="extraPhoto" type="file" accept="image/*"><button class="btn btn-secondary" type="button" id="addPhotoBtn">+ Adicionar foto</button></div>
+  <div id="photosGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:16px"></div>
+</div>
+</div>
+
+<div class="panel" style="margin-top:20px"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Projeto</th><th>Categoria</th><th>Estado</th><th>Destaque</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/video-utils.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("projetos");
+const card=document.getElementById("projectFormCard"),form=document.getElementById("projectForm"),rows=document.getElementById("rows"),image=document.getElementById("image"),preview=document.getElementById("preview"),videoId=document.getElementById("videoId"),photosPanel=document.getElementById("photosPanel"),photosGrid=document.getElementById("photosGrid"),extraPhoto=document.getElementById("extraPhoto");
+
+async function loadVideoOptions(){const {data}=await designeSupabase.from("videos").select("id,titulo").order("titulo",{ascending:true});videoId.innerHTML='<option value="">Nenhum</option>'+(data||[]).map(v=>`<option value="${v.id}">${escapeHtml(v.titulo)}</option>`).join("")}
+
+function reset(){form.reset();id.value="";oldImage.value="";preview.src="../assets/hero.jpg";active.checked=true;featured.checked=false;videoId.value="";image.required=true;photosPanel.hidden=true;photosGrid.innerHTML="";card.hidden=true}
+
+async function load(){const {data,error}=await designeSupabase.from("projetos").select("*").order("destaque",{ascending:false}).order("created_at",{ascending:false});if(error){adminToast(error.message,"error");return}
+rows.innerHTML=data.length?data.map(w=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><img class="thumb" src="${escapeHtml(w.imagem_capa_url||"../assets/hero.jpg")}"><div><strong>${escapeHtml(w.titulo)}</strong><div class="muted">${escapeHtml(w.descricao||"").slice(0,60)}</div></div></div></td><td>${escapeHtml(w.categoria||"")}</td><td>${w.ativo?'<span style="color:#8cf0ac">Publicado</span>':'<span class="muted">Oculto</span>'}</td><td>${w.destaque?"⭐ Sim":"—"}</td><td><div class="actions-row"><button class="btn btn-secondary edit" data-id="${w.id}">Editar</button><button class="btn btn-secondary toggle" data-id="${w.id}">${w.ativo?'Ocultar':'Publicar'}</button><button class="btn btn-danger delete" data-id="${w.id}">Excluir</button></div></td></tr>`).join(""):'<tr><td colspan="5"><div class="empty">Ainda não há projetos.</div></td></tr>';
+rows.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(b.dataset.id));rows.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>toggleAtivo(b.dataset.id));rows.querySelectorAll(".delete").forEach(b=>b.onclick=()=>del(b.dataset.id))}
+
+async function loadPhotos(projetoId){
+  const {data}=await designeSupabase.from("projeto_fotos").select("*").eq("projeto_id",projetoId).order("ordem",{ascending:true});
+  photosGrid.innerHTML=(data||[]).map(f=>`<div style="position:relative"><img src="${escapeHtml(f.imagem_url)}" style="width:100%;height:90px;object-fit:cover;border-radius:6px"><button type="button" class="btn btn-danger" data-photo-id="${f.id}" data-url="${escapeHtml(f.imagem_url)}" style="position:absolute;top:4px;right:4px;padding:4px 7px;font-size:11px">✕</button></div>`).join("") || '<p class="muted" style="grid-column:1/-1">Ainda não há fotos adicionais.</p>';
+  photosGrid.querySelectorAll("[data-photo-id]").forEach(b=>b.onclick=async()=>{
+    if(!confirm("Remover esta foto?"))return;
+    await deleteImageByUrl(b.dataset.url,"projetos");
+    const {error}=await designeSupabase.from("projeto_fotos").delete().eq("id",b.dataset.photoId);
+    if(error)adminToast(error.message,"error");else loadPhotos(projetoId);
+  });
+}
+
+async function edit(uid){const {data,error}=await designeSupabase.from("projetos").select("*").eq("id",uid).single();if(error)return adminToast(error.message,"error");
+await loadVideoOptions();
+id.value=data.id;oldImage.value=data.imagem_capa_url||"";title.value=data.titulo;description.value=data.descricao||"";category.value=data.categoria||"";active.checked=data.ativo;featured.checked=data.destaque;videoId.value=data.video_id||"";preview.src=data.imagem_capa_url||"../assets/hero.jpg";image.required=false;
+photosPanel.hidden=false;await loadPhotos(data.id);
+card.hidden=false;scrollTo({top:0,behavior:"smooth"})}
+
+async function toggleAtivo(uid){const {data}=await designeSupabase.from("projetos").select("ativo").eq("id",uid).single();if(!data)return;const {error}=await designeSupabase.from("projetos").update({ativo:!data.ativo,updated_at:new Date().toISOString()}).eq("id",uid);if(error)adminToast(error.message,"error");else{adminToast("Estado atualizado.");load()}}
+
+async function del(uid){if(!confirm("Excluir este projeto e todas as suas fotos adicionais?"))return;const {data}=await designeSupabase.from("projetos").select("imagem_capa_url").eq("id",uid).single();const {error}=await designeSupabase.from("projetos").delete().eq("id",uid);if(error)adminToast(error.message,"error");else{if(data?.imagem_capa_url)deleteImageByUrl(data.imagem_capa_url,"projetos");adminToast("Projeto excluído.");load()}}
+
+image.onchange=()=>{if(image.files[0])preview.src=URL.createObjectURL(image.files[0])};
+document.getElementById("newBtn").onclick=async()=>{form.reset();id.value="";oldImage.value="";preview.src="../assets/hero.jpg";active.checked=true;featured.checked=false;image.required=true;photosPanel.hidden=true;await loadVideoOptions();card.hidden=false;scrollTo({top:0,behavior:"smooth"})};
+document.getElementById("cancel").onclick=reset;
+
+addPhotoBtn.onclick=async()=>{
+  if(!id.value){adminToast("Guarde o projeto primeiro para depois adicionar fotos extra.","error");return}
+  if(!extraPhoto.files[0]){adminToast("Escolha uma foto primeiro.","error");return}
+  addPhotoBtn.disabled=true;addPhotoBtn.textContent="A enviar…";
+  try{
+    const url=await uploadImage(extraPhoto.files[0],"projetos","projetos");
+    const {data:existing}=await designeSupabase.from("projeto_fotos").select("id").eq("projeto_id",id.value);
+    const {error}=await designeSupabase.from("projeto_fotos").insert({projeto_id:id.value,imagem_url:url,ordem:(existing?.length||0)});
+    if(error)throw error;
+    extraPhoto.value="";adminToast("Foto adicionada.");loadPhotos(id.value);
+  }catch(e){adminToast(e.message||"Erro ao enviar foto.","error")}
+  finally{addPhotoBtn.disabled=false;addPhotoBtn.textContent="+ Adicionar foto"}
+};
+
+form.onsubmit=async e=>{e.preventDefault();const save=document.getElementById("save");save.disabled=true;save.textContent="A publicar…";try{
+let imageUrl=oldImage.value;if(image.files[0])imageUrl=await uploadImage(image.files[0],"projetos","projetos");if(!imageUrl)throw new Error("Selecione uma foto de capa.");
+const payload={titulo:title.value.trim(),descricao:description.value.trim(),categoria:category.value.trim(),imagem_capa_url:imageUrl,ativo:active.checked,destaque:featured.checked,video_id:videoId.value||null,updated_at:new Date().toISOString()};
+let error,savedId=id.value;
+if(id.value){({error}=await designeSupabase.from("projetos").update(payload).eq("id",id.value))}
+else{const res=await designeSupabase.from("projetos").insert(payload).select("id").single();error=res.error;savedId=res.data?.id}
+if(error)throw error;
+adminToast("Projeto publicado com sucesso.");
+id.value=savedId;oldImage.value=imageUrl;image.required=false;photosPanel.hidden=false;await loadPhotos(savedId);
+load();
+}catch(e){adminToast(e.message||"Erro ao guardar projeto.","error")}finally{save.disabled=false;save.textContent="Publicar"}};
+
+load();loadVideoOptions();
+})();
+</script>
+</body></html>

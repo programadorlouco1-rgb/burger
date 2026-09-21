@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Serviços — DESIGNE decoração Admin</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+<img class="admin-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<button class="sidebar-close" aria-label="Fechar menu">✕</button>
+<nav class="admin-nav">
+<a href="index.html" data-page="dashboard">📊 <span>Dashboard</span></a>
+<a href="moveis.html" data-page="moveis">🪑 <span>Móveis</span></a>
+<a href="projetos.html" data-page="projetos">🏠 <span>Projetos</span></a>
+<a href="videos.html" data-page="videos">🎥 <span>Vídeos</span></a>
+<a href="servicos.html" data-page="servicos">🛠️ <span>Serviços</span></a>
+<a href="configuracoes.html" data-page="configuracoes">⚙️ <span>Configurações</span></a>
+</nav><button class="admin-logout">🚪 <span>Sair</span></button>
+</aside>
+<main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu">☰</button><div><h1>Serviços</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site ↗</a></header>
+<div class="admin-content"><div class="section-title" style="margin-top:0"><div><h2>Serviços ("O que fazemos")</h2><p class="muted">Cada serviço aparece no site com a foto acima do título e da descrição. Ex.: Móveis planejados, Cozinhas, Guarda-fatos, Camas e quartos, Racks e painéis, Cómodas, Portas, Pérgolas, Fabricação sob medida, Acabamentos.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar serviço</button></div>
+<div class="form-card" id="serviceFormCard" hidden><form id="serviceForm" class="form-grid">
+<input type="hidden" id="id"><input type="hidden" id="oldImage">
+<div class="field full"><label>Foto</label><div class="file-row"><img class="preview" id="preview" src="../assets/hero.jpg" alt="Pré-visualização"><input id="image" type="file" accept="image/*"></div><span class="hint">Opcional — se não escolher foto, é usada uma imagem padrão.</span></div>
+<div class="field"><label>Título<input id="title" required maxlength="120"></label></div>
+<div class="field"><label>Ordem de exibição<input id="ordem" type="number" step="1" value="0"></label><span class="hint">Números menores aparecem primeiro.</span></div>
+<div class="field full"><label>Descrição<textarea id="description" maxlength="500"></textarea></label></div>
+<label class="check"><input id="active" type="checkbox" checked> Publicado</label>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Publicar</button><button class="btn btn-secondary" type="button" id="cancel">Cancelar</button></div></div>
+</form></div>
+<div class="panel" style="margin-top:20px"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Serviço</th><th>Ordem</th><th>Estado</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/video-utils.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("servicos");const card=document.getElementById("serviceFormCard"),form=document.getElementById("serviceForm"),rows=document.getElementById("rows"),image=document.getElementById("image"),preview=document.getElementById("preview");
+function reset(){form.reset();id.value="";oldImage.value="";preview.src="../assets/hero.jpg";ordem.value="0";active.checked=true;card.hidden=true}
+async function load(){const {data,error}=await designeSupabase.from("servicos").select("*").order("ordem",{ascending:true}).order("created_at",{ascending:true});if(error){adminToast(error.message,"error");return}rows.innerHTML=data.length?data.map(s=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><img class="thumb" src="${escapeHtml(s.imagem_url||"../assets/hero.jpg")}"><div><strong>${escapeHtml(s.titulo)}</strong><div class="muted">${escapeHtml(s.descricao||"").slice(0,70)}</div></div></div></td><td>${s.ordem}</td><td>${s.ativo?'<span style="color:#8cf0ac">Publicado</span>':'<span class="muted">Oculto</span>'}</td><td><div class="actions-row"><button class="btn btn-secondary edit" data-id="${s.id}">Editar</button><button class="btn btn-danger delete" data-id="${s.id}">Excluir</button></div></td></tr>`).join(""):'<tr><td colspan="4"><div class="empty">Ainda não há serviços.</div></td></tr>';
+rows.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(b.dataset.id));rows.querySelectorAll(".delete").forEach(b=>b.onclick=()=>del(b.dataset.id))}
+async function edit(uid){const {data,error}=await designeSupabase.from("servicos").select("*").eq("id",uid).single();if(error)return adminToast(error.message,"error");id.value=data.id;oldImage.value=data.imagem_url||"";title.value=data.titulo;description.value=data.descricao||"";ordem.value=data.ordem??0;active.checked=data.ativo;preview.src=data.imagem_url||"../assets/hero.jpg";card.hidden=false;scrollTo({top:0,behavior:"smooth"})}
+async function del(uid){if(!confirm("Excluir este serviço?"))return;const {data}=await designeSupabase.from("servicos").select("imagem_url").eq("id",uid).single();const {error}=await designeSupabase.from("servicos").delete().eq("id",uid);if(error)adminToast(error.message,"error");else{if(data?.imagem_url)deleteImageByUrl(data.imagem_url,"servicos");adminToast("Serviço excluído.");load()}}
+image.onchange=()=>{if(image.files[0])preview.src=URL.createObjectURL(image.files[0])};document.getElementById("newBtn").onclick=()=>{form.reset();id.value="";oldImage.value="";preview.src="../assets/hero.jpg";ordem.value="0";active.checked=true;card.hidden=false;scrollTo({top:0,behavior:"smooth"})};document.getElementById("cancel").onclick=reset;
+form.onsubmit=async e=>{e.preventDefault();const save=document.getElementById("save");save.disabled=true;save.textContent="A publicar…";try{let imageUrl=oldImage.value;if(image.files[0])imageUrl=await uploadImage(image.files[0],"servicos","servicos");const payload={titulo:title.value.trim(),descricao:description.value.trim(),imagem_url:imageUrl,ordem:Number(ordem.value)||0,ativo:active.checked,updated_at:new Date().toISOString()};let error;if(id.value){({error}=await designeSupabase.from("servicos").update(payload).eq("id",id.value))}else{({error}=await designeSupabase.from("servicos").insert(payload))}if(error)throw error;adminToast("Serviço publicado com sucesso.");reset();load()}catch(e){adminToast(e.message||"Erro ao guardar serviço.","error")}finally{save.disabled=false;save.textContent="Publicar"}};load()})();
+</script>
+</body></html>

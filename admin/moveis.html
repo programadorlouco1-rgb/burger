@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Móveis — DESIGNE decoração Admin</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+<img class="admin-logo" src="../assets/logo-header.png" alt="DESIGNE decoração">
+<button class="sidebar-close" aria-label="Fechar menu">✕</button>
+<nav class="admin-nav">
+<a href="index.html" data-page="dashboard">📊 <span>Dashboard</span></a>
+<a href="moveis.html" data-page="moveis">🪑 <span>Móveis</span></a>
+<a href="projetos.html" data-page="projetos">🏠 <span>Projetos</span></a>
+<a href="videos.html" data-page="videos">🎥 <span>Vídeos</span></a>
+<a href="servicos.html" data-page="servicos">🛠️ <span>Serviços</span></a>
+<a href="configuracoes.html" data-page="configuracoes">⚙️ <span>Configurações</span></a>
+</nav><button class="admin-logout">🚪 <span>Sair</span></button>
+</aside>
+<main class="admin-main"><header class="admin-topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" aria-label="Menu">☰</button><div><h1>Móveis</h1><small data-admin-email></small></div></div><a class="btn btn-secondary" href="../index.html">Ver site ↗</a></header>
+<div class="admin-content"><div class="section-title" style="margin-top:0"><div><h2>Móveis</h2><p class="muted">Publique móveis planejados sem editar o site. Como são feitos sob medida, o preço é opcional.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar móvel</button></div>
+<div class="form-card" id="productFormCard" hidden>
+<form id="productForm" class="form-grid">
+<input type="hidden" id="id"><input type="hidden" id="oldImage">
+<div class="field full"><label>Foto</label><div class="file-row"><img class="preview" id="preview" src="../assets/hero.jpg" alt="Pré-visualização"><input id="image" type="file" accept="image/*"></div><span class="hint">Escolha uma imagem da galeria do telefone. JPG/PNG/WebP recomendado.</span></div>
+<div class="field"><label>Nome<input id="prodName" required maxlength="120" placeholder="Ex.: Guarda-fatos Premium"></label></div>
+<div class="field"><label>Categoria<input id="category" maxlength="80" placeholder="Ex.: Guarda-fatos, Cozinhas, Racks..."></label></div>
+<div class="field full"><label>Descrição<textarea id="description" maxlength="1000"></textarea></label></div>
+<div class="field"><label>Preço em Kz (opcional)<input id="price" type="number" min="0" step="1" placeholder="Deixe vazio para \"Preço sob orçamento\""></label></div>
+<div class="field"><label>Vídeo associado (opcional)<select id="videoId"><option value="">Nenhum</option></select></label><span class="hint">Gerido em 🎥 Vídeos.</span></div>
+<label class="check"><input id="available" type="checkbox" checked> Disponível</label>
+<label class="check"><input id="featured" type="checkbox"> ⭐ Destaque</label>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Publicar</button><button class="btn btn-secondary" type="button" id="cancel">Cancelar</button></div></div>
+</form></div>
+<div class="panel" style="margin-top:20px"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Móvel</th><th>Preço</th><th>Estado</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/video-utils.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("moveis");const formCard=document.getElementById("productFormCard"),form=document.getElementById("productForm"),rows=document.getElementById("rows"),image=document.getElementById("image"),preview=document.getElementById("preview"),videoId=document.getElementById("videoId");
+async function loadVideoOptions(){const {data}=await designeSupabase.from("videos").select("id,titulo").order("titulo",{ascending:true});videoId.innerHTML='<option value="">Nenhum</option>'+(data||[]).map(v=>`<option value="${v.id}">${escapeHtml(v.titulo)}</option>`).join("")}
+function reset(){form.reset();id.value="";oldImage.value="";preview.src="../assets/hero.jpg";available.checked=true;featured.checked=false;videoId.value="";formCard.hidden=true}
+async function load(){const {data,error}=await designeSupabase.from("moveis").select("*").order("destaque",{ascending:false}).order("created_at",{ascending:false});if(error){adminToast(error.message,"error");return}rows.innerHTML=data.length?data.map(p=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><img class="thumb" src="${escapeHtml(p.imagem_url||"../assets/hero.jpg")}"><div><strong>${escapeHtml(p.nome)}${p.destaque?" ⭐":""}</strong><div class="muted">${escapeHtml(p.categoria||"")}</div></div></div></td><td>${formatKz(p.preco)}</td><td>${p.disponivel?'<span style="color:#8cf0ac">Disponível</span>':'<span class="muted">Desativado</span>'}</td><td><div class="actions-row"><button class="btn btn-secondary edit" data-id="${p.id}">Editar</button><button class="btn ${p.disponivel?'btn-danger':'btn-success'} toggle" data-id="${p.id}">${p.disponivel?'Desativar':'Ativar'}</button><button class="btn btn-danger delete" data-id="${p.id}">Excluir</button></div></td></tr>`).join(""):'<tr><td colspan="4"><div class="empty">Ainda não há móveis.</div></td></tr>';
+rows.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(b.dataset.id));rows.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>toggle(b.dataset.id));rows.querySelectorAll(".delete").forEach(b=>b.onclick=()=>del(b.dataset.id));}
+async function edit(uid){const {data,error}=await designeSupabase.from("moveis").select("*").eq("id",uid).single();if(error)return adminToast(error.message,"error");await loadVideoOptions();id.value=data.id;oldImage.value=data.imagem_url||"";prodName.value=data.nome;description.value=data.descricao||"";price.value=data.preco??"";category.value=data.categoria||"";available.checked=data.disponivel;featured.checked=data.destaque;videoId.value=data.video_id||"";preview.src=data.imagem_url||"../assets/hero.jpg";formCard.hidden=false;scrollTo({top:0,behavior:"smooth"})}
+async function toggle(uid){const {data}=await designeSupabase.from("moveis").select("disponivel").eq("id",uid).single();if(!data)return;const {error}=await designeSupabase.from("moveis").update({disponivel:!data.disponivel,updated_at:new Date().toISOString()}).eq("id",uid);if(error)adminToast(error.message,"error");else{adminToast("Estado atualizado.");load()}}
+async function del(uid){if(!confirm("Excluir este móvel? Esta ação não pode ser desfeita."))return;const {data}=await designeSupabase.from("moveis").select("imagem_url").eq("id",uid).single();const {error}=await designeSupabase.from("moveis").delete().eq("id",uid);if(error)adminToast(error.message,"error");else{if(data?.imagem_url)deleteImageByUrl(data.imagem_url,"moveis");adminToast("Móvel excluído.");load()}}
+image.onchange=()=>{if(image.files[0])preview.src=URL.createObjectURL(image.files[0])};document.getElementById("newBtn").onclick=async()=>{form.reset();id.value="";oldImage.value="";preview.src="../assets/hero.jpg";available.checked=true;featured.checked=false;await loadVideoOptions();formCard.hidden=false;scrollTo({top:0,behavior:"smooth"})};document.getElementById("cancel").onclick=reset;
+form.onsubmit=async e=>{e.preventDefault();const save=document.getElementById("save");save.disabled=true;save.textContent="A publicar…";try{let imageUrl=oldImage.value;if(image.files[0])imageUrl=await uploadImage(image.files[0],"moveis","moveis");const payload={nome:prodName.value.trim(),descricao:description.value.trim(),preco:price.value===""?null:Number(price.value),categoria:category.value.trim(),imagem_url:imageUrl,disponivel:available.checked,destaque:featured.checked,video_id:videoId.value||null,updated_at:new Date().toISOString()};let error;if(id.value){({error}=await designeSupabase.from("moveis").update(payload).eq("id",id.value))}else{({error}=await designeSupabase.from("moveis").insert(payload))}if(error)throw error;adminToast("Móvel publicado com sucesso.");reset();load()}catch(e){adminToast(e.message||"Erro ao guardar móvel.","error")}finally{save.disabled=false;save.textContent="Publicar"}};
+load();loadVideoOptions();
+})();
+</script>
+</body></html>

@@ -1,3 +1,49 @@
+/* "O que fazemos" — botão Ver mais / Ver menos.
+   Fica fora do bloco do Supabase para funcionar também com os cards estáticos do HTML. */
+(function(){
+  // Nº de cards visíveis antes de "Ver mais": 4 (uma linha no desktop) e 3 no telemóvel
+  const svcMQ = window.matchMedia("(max-width:700px)");
+  const servicesLimit = () => svcMQ.matches ? 3 : 4;
+  function applyServicesLimit(){
+    const box=document.getElementById("publicServices");
+    const btn=document.getElementById("toggleServices");
+    if(!box || !btn) return;
+    const cards=Array.from(box.querySelectorAll(":scope > .service"));
+    const limit=servicesLimit();
+    cards.forEach((c,i)=>c.classList.toggle("is-extra", i>=limit));
+    const hasExtra=cards.length>limit;
+    btn.hidden=!hasExtra;
+    if(!hasExtra) box.classList.remove("expanded");
+    syncServicesToggle();
+  }
+  function syncServicesToggle(){
+    const box=document.getElementById("publicServices");
+    const btn=document.getElementById("toggleServices");
+    if(!box || !btn) return;
+    const open=box.classList.contains("expanded");
+    btn.setAttribute("aria-expanded", open?"true":"false");
+    const label=btn.querySelector(".toggle-label");
+    if(label) label.textContent = open ? "Ver menos" : "Ver mais";
+  }
+  (function initServicesToggle(){
+    const box=document.getElementById("publicServices");
+    const btn=document.getElementById("toggleServices");
+    if(!box || !btn) return;
+    btn.addEventListener("click",()=>{
+      const open=box.classList.toggle("expanded");
+      syncServicesToggle();
+      if(!open){
+        const sec=document.getElementById("servicos");
+        if(sec) sec.scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    });
+    svcMQ.addEventListener ? svcMQ.addEventListener("change",applyServicesLimit) : svcMQ.addListener(applyServicesLimit);
+    applyServicesLimit(); // cobre também os cards estáticos do HTML
+  })();
+
+  window.designeApplyServicesLimit = applyServicesLimit;
+})();
+
 (function(){
   const sb = window.designeSupabase;
   if (!sb) return;
@@ -41,41 +87,18 @@
     if(window.designeAnimateNew) window.designeAnimateNew(box);
   }
 
-  const HOME_SERVICES_LIMIT = 4;
   async function loadServices(){
     const box=document.getElementById("publicServices"); if(!box) return;
     const {data,error}=await sb.from("servicos").select("*").eq("ativo",true).order("ordem",{ascending:true}).order("created_at",{ascending:true});
     if(error){ box.innerHTML='<div class="services-state">Não foi possível carregar os serviços neste momento.</div>'; return; }
     if(!data?.length){ box.innerHTML='<div class="services-state">Novos serviços serão publicados aqui em breve.</div>'; return; }
     box.classList.remove("expanded");
-    box.innerHTML=data.map((s,i)=>`<article class="service${i>=HOME_SERVICES_LIMIT?" is-extra":""}">
+    box.innerHTML=data.map(s=>`<article class="service">
       <img class="service-photo" src="${esc(s.imagem_url || "assets/hero.jpg")}" alt="${esc(s.titulo)}" loading="lazy">
       <div class="service-body"><h3>${esc(s.titulo)}</h3><p>${esc(s.descricao || "")}</p></div>
     </article>`).join("");
-    setupServicesToggle(box, data.length>HOME_SERVICES_LIMIT);
+    if(window.designeApplyServicesLimit) window.designeApplyServicesLimit();
     if(window.designeAnimateNew) window.designeAnimateNew(box);
-  }
-
-  // Botão "Ver mais / Ver menos" da secção "O que fazemos"
-  function setupServicesToggle(box, hasExtra){
-    const btn=document.getElementById("toggleServices"); if(!btn) return;
-    btn.hidden=!hasExtra;
-    if(!hasExtra) return;
-    const label=btn.querySelector(".toggle-label");
-    const setState=(open)=>{
-      box.classList.toggle("expanded",open);
-      btn.setAttribute("aria-expanded",open?"true":"false");
-      if(label) label.textContent=open?"Ver menos":"Ver mais";
-    };
-    setState(false);
-    btn.onclick=()=>{
-      const open=!box.classList.contains("expanded");
-      setState(open);
-      if(!open){
-        const sec=document.getElementById("servicos");
-        if(sec) sec.scrollIntoView({behavior:"smooth",block:"start"});
-      }
-    };
   }
 
   const HOME_PROJETOS_LIMIT = 4;

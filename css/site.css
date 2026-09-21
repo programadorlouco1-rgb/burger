@@ -173,17 +173,6 @@ nav .btn:hover{border-color:var(--dourado);color:#8a6a20}
 .service-body{padding:var(--sp-6) var(--sp-5) var(--sp-6);position:relative;flex:1}
 .service h3{font-size:18px;font-weight:600;color:#f3f1e9}
 .service p{color:#a8a598;font-size:13px;margin-top:var(--sp-2);line-height:1.6}
-.service.is-extra{display:none}
-.services.expanded .service.is-extra{display:flex;animation:serviceReveal var(--dur-slow,.5s) var(--ease-out,ease) both}
-.services.expanded .service.is-extra:nth-child(4n+2){animation-delay:.06s}
-.services.expanded .service.is-extra:nth-child(4n+3){animation-delay:.12s}
-.services.expanded .service.is-extra:nth-child(4n+4){animation-delay:.18s}
-@keyframes serviceReveal{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.services-more{text-align:center;margin-top:var(--sp-8,32px)}
-.services-more[hidden],.services-more .btn[hidden]{display:none}
-.services-more .icon-chevron{width:16px;height:16px;transition:transform var(--dur-base,.3s) var(--ease,ease)}
-.services-more .btn[aria-expanded="true"] .icon-chevron{transform:rotate(180deg)}
-@media (prefers-reduced-motion:reduce){.services.expanded .service.is-extra{animation:none}}
 .services-state{grid-column:1/-1;color:var(--muted);padding:25px;text-align:center;background:var(--verde-deep)}
 
 /* ============================================================
@@ -468,3 +457,91 @@ body{overflow-wrap:break-word}
   .video-modal-inner{width:min(900px,100%,calc((100vh - 32px)*1.7778));width:min(900px,100%,calc((100dvh - 32px)*1.7778))}
 }
 
+/* ============================================================
+   Botão "Ver mais" — secção "O que fazemos"
+   (é um <button>, por isso limpa o estilo nativo do browser)
+   ============================================================ */
+.service.is-extra{display:none}
+.services.expanded .service.is-extra{display:flex;animation:serviceReveal var(--dur-slow) var(--ease-out) both}
+.services.expanded .service.is-extra:nth-child(even){animation-delay:.08s}
+@keyframes serviceReveal{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.services-more{display:flex;justify-content:center;margin-top:var(--sp-10)}
+.services-more[hidden]{display:none}
+.btn-more{-webkit-appearance:none;appearance:none;cursor:pointer;font-family:inherit;gap:12px;min-width:min(240px,100%);width:auto;padding:15px 34px;border-radius:var(--radius-full);border:1px solid rgba(217,185,121,.55);background:rgba(182,144,60,.08);color:var(--dourado2);letter-spacing:.14em;-webkit-tap-highlight-color:transparent}
+.btn-more:hover{background:var(--dourado);border-color:var(--dourado);color:#1c1608;box-shadow:var(--shadow-gold);transform:translateY(-2px)}
+.btn-more:active{transform:translateY(0)}
+.btn-more[hidden]{display:none}
+.btn-more .icon-chevron{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;transition:transform var(--dur-base) var(--ease)}
+.btn-more[aria-expanded="true"] .icon-chevron{transform:rotate(180deg)}
+@media(prefers-reduced-motion:reduce){.services.expanded .service.is-extra{animation:none}}
+
+/* ============================================================
+   Responsivo — reforço v2 (fluido de 320px a ecrãs grandes)
+   ============================================================ */
+:root{--gutter:clamp(16px,4.6vw,24px)}
+.container,.hero .container{width:min(var(--max),calc(100% - (var(--gutter) * 2)))}
+@media(min-width:1600px){:root{--max:1360px}}
+
+/* grelhas nunca rebentam a largura por conteúdo longo */
+.hero-grid>*,.intro-grid>*,.why>*,.quote-grid>*,.video-feature-grid>*,.contact-grid>*,.services>*,.products-grid>*,.process>*,.footer-grid>*{min-width:0}
+h1,h2,h3,p,a,strong{overflow-wrap:anywhere}
+iframe,svg,canvas,video{max-width:100%}
+
+/* espaçamento e texto fluidos */
+.section{padding:clamp(56px,9vw,96px) 0}
+.dark .section-head p{color:#b9b3a1}
+.section-head h2{font-size:clamp(28px,6.4vw,54px)}
+.btn{padding:14px clamp(18px,4.5vw,26px)}
+.stat b{font-size:clamp(24px,6vw,30px)}
+.services{margin-top:clamp(28px,6vw,48px)}
+.products-grid,.gallery{margin-top:clamp(28px,6vw,48px)}
+
+/* tablet: cabeçalho/heroi/imagens proporcionais */
+@media(max-width:1100px){
+  .why-visual img{height:clamp(280px,62vw,430px)}
+  .video-thumb-wrap img{height:clamp(200px,50vw,340px)}
+  .video-feature-grid{gap:28px}
+}
+/* tablet vertical: galeria a 2 colunas em vez de 12 fixas */
+@media(min-width:701px) and (max-width:1000px){
+  .gallery{grid-template-columns:1fr 1fr}
+  .g1,.g2,.g3,.g4,.g5,.g6,.g7,.g8{grid-column:span 1;height:300px}
+  .g1{grid-column:span 2;height:400px}
+  .quote-form{padding:var(--sp-8)}
+}
+/* evita um card "órfão" sozinho na última linha da galeria (2 colunas) */
+@media(max-width:1000px){
+  .gallery>.g:last-child:nth-child(even){grid-column:span 2}
+}
+@media(max-width:360px){.gallery>.g:last-child:nth-child(even){grid-column:span 1}}
+/* telemóvel */
+@media(max-width:700px){
+  .hero h1{font-size:clamp(28px,8.6vw,36px)}
+  .mobile-links{font-size:clamp(24px,7.6vw,30px);gap:clamp(16px,4vh,25px)}
+  #mobile{padding:112px var(--gutter) 40px}
+  .why-visual .badge{max-width:min(260px,80%);padding:16px 18px}
+  .point{gap:14px}
+  .step{min-height:0;padding:var(--sp-6) var(--sp-5)}
+  .cta h2{font-size:clamp(26px,7.4vw,34px)}
+  .map-card a{flex-direction:column;align-items:flex-start;gap:6px}
+  .footer-grid{gap:32px}
+  .footer-logo{max-width:100%}
+}
+/* telemóveis pequenos (≤360px) */
+@media(max-width:360px){
+  .logo{height:38px;max-width:150px}
+  header{padding:16px 0}
+  .hero-meta{gap:16px}
+  .hero-meta strong{font-size:13px}
+  .actions{gap:10px}
+  .btn{font-size:11px;letter-spacing:.03em}
+  .quote-form{padding:18px 14px}
+  .g-cat{font-size:9px}
+  .gallery{grid-template-columns:1fr}
+  .g1{grid-column:span 1}
+}
+/* botão do menu e flutuantes respeitam a área segura (notch / barra do iPhone) */
+@supports(padding:max(0px)){
+  .back-top{bottom:max(24px,env(safe-area-inset-bottom))}
+  footer{padding-bottom:max(40px,env(safe-area-inset-bottom))}
+}

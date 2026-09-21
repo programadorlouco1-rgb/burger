@@ -95,7 +95,8 @@
   function open(videoUid,title){
     if(!videoUid) return;
     const src=window.resolveVideoEmbedUrl ? window.resolveVideoEmbedUrl(videoUid) : videoUid;
-    inner.innerHTML=`<iframe src="${src}" title="${(title||'Vídeo').replace(/"/g,'&quot;')}" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+    if(!src){ alert('Link de vídeo inválido.'); return; }
+    inner.innerHTML=`<iframe src="${src}" title="${(title||'Vídeo').replace(/"/g,'&quot;')}" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe>`;
     modal.classList.add('open'); document.body.style.overflow='hidden';
   }
   function close(){

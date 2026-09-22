@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Avaliações — Cokylicious Admin</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar"></aside>
+<main class="admin-main"><header class="admin-topbar"></header>
+<div class="admin-content">
+<div class="section-title" style="margin-top:0"><div><h2>Avaliações</h2><p class="muted">Depoimentos de clientes mostrados na secção "Quem provou, sabe".</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar avaliação</button></div>
+<div class="form-card" id="formCard" hidden>
+<form id="avForm" class="form-grid">
+<input type="hidden" id="id">
+<div class="field"><label>Nome do cliente<input id="nome" required maxlength="80"></label></div>
+<div class="field"><label>Estrelas<select id="estrelas"><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option><option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option><option value="1">★☆☆☆☆ (1)</option></select></label></div>
+<div class="field full"><label>Comentário<textarea id="comentario" required maxlength="400"></textarea></label></div>
+<div class="field"><label>Ordem<input id="ordem" type="number" step="1" value="0"></label></div>
+<label class="check"><input id="ativo" type="checkbox" checked> Ativa (aparece no site)</label>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Publicar</button><button class="btn btn-secondary" type="button" id="cancel">Cancelar</button></div></div>
+</form></div>
+<div class="panel" style="margin-top:20px"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Cliente</th><th>Estrelas</th><th>Estado</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("avaliacoes","Avaliações");const formCard=document.getElementById("formCard"),form=document.getElementById("avForm"),rows=document.getElementById("rows");
+function reset(){form.reset();id.value="";estrelas.value="5";ordem.value="0";ativo.checked=true;formCard.hidden=true}
+async function load(){const {data,error}=await designeSupabase.from("avaliacoes").select("*").order("ordem",{ascending:true});if(error){adminToast(error.message,"error");return}
+rows.innerHTML=data.length?data.map(a=>`<tr><td><strong>${escapeHtml(a.nome)}</strong><div class="muted">${escapeHtml((a.comentario||"").slice(0,60))}${(a.comentario||"").length>60?"…":""}</div></td><td>${"★".repeat(a.estrelas)}${"☆".repeat(5-a.estrelas)}</td><td>${a.ativo?'<span class="pill on">Ativa</span>':'<span class="pill">Inativa</span>'}</td><td><div class="actions-row"><button class="btn btn-secondary edit" data-id="${a.id}">Editar</button><button class="btn ${a.ativo?'btn-danger':'btn-success'} toggle" data-id="${a.id}">${a.ativo?'Desativar':'Ativar'}</button><button class="btn btn-danger delete" data-id="${a.id}">Excluir</button></div></td></tr>`).join(""):'<tr><td colspan="4"><div class="empty">Ainda não há avaliações.</div></td></tr>';
+rows.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(b.dataset.id));rows.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>toggle(b.dataset.id));rows.querySelectorAll(".delete").forEach(b=>b.onclick=()=>del(b.dataset.id));}
+async function edit(uid){const {data,error}=await designeSupabase.from("avaliacoes").select("*").eq("id",uid).single();if(error)return adminToast(error.message,"error");id.value=data.id;nome.value=data.nome;comentario.value=data.comentario;estrelas.value=data.estrelas;ordem.value=data.ordem??0;ativo.checked=data.ativo;formCard.hidden=false;scrollTo({top:0,behavior:"smooth"})}
+async function toggle(uid){const {data}=await designeSupabase.from("avaliacoes").select("ativo").eq("id",uid).single();if(!data)return;const {error}=await designeSupabase.from("avaliacoes").update({ativo:!data.ativo}).eq("id",uid);if(error)adminToast(error.message,"error");else{adminToast("Estado atualizado.");load()}}
+async function del(uid){if(!confirm("Excluir esta avaliação?"))return;const {error}=await designeSupabase.from("avaliacoes").delete().eq("id",uid);if(error)adminToast(error.message,"error");else{adminToast("Avaliação excluída.");load()}}
+document.getElementById("newBtn").onclick=()=>{reset();formCard.hidden=false;scrollTo({top:0,behavior:"smooth"})};document.getElementById("cancel").onclick=reset;
+form.onsubmit=async e=>{e.preventDefault();const save=document.getElementById("save");save.disabled=true;save.textContent="A publicar…";try{const payload={nome:nome.value.trim(),comentario:comentario.value.trim(),estrelas:Number(estrelas.value),ordem:Number(ordem.value)||0,ativo:ativo.checked};let error;if(id.value){({error}=await designeSupabase.from("avaliacoes").update(payload).eq("id",id.value))}else{({error}=await designeSupabase.from("avaliacoes").insert(payload))}if(error)throw error;adminToast("Avaliação publicada com sucesso.");reset();load()}catch(e){adminToast(e.message||"Erro ao guardar avaliação.","error")}finally{save.disabled=false;save.textContent="Publicar"}};
+load();
+})();
+</script>
+</body></html>

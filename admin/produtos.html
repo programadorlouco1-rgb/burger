@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-AO"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Produtos — Cokylicious Admin</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/admin.css"></head><body>
+<div class="admin-shell">
+<aside class="admin-sidebar"></aside>
+<main class="admin-main"><header class="admin-topbar"></header>
+<div class="admin-content">
+<div class="section-title" style="margin-top:0"><div><h2>Produtos</h2><p class="muted">Hambúrgueres, acompanhamentos, bebidas… Deixa o preço vazio se ainda não o definiste.</p></div><button class="btn btn-primary" id="newBtn">+ Adicionar produto</button></div>
+<div class="form-card" id="formCard" hidden>
+<form id="prodForm" class="form-grid">
+<input type="hidden" id="id"><input type="hidden" id="oldImage">
+<div class="field full"><label>Foto</label><div class="file-row"><img class="preview" id="preview" src="../assets/placeholder-burger.svg" alt="Pré-visualização"><input id="image" type="file" accept="image/*"></div><span class="hint">Escolhe uma imagem da galeria do telefone. JPG/PNG/WebP recomendado.</span></div>
+<div class="field"><label>Nome<input id="nome" required maxlength="120" placeholder="Ex.: Coky Burger"></label></div>
+<div class="field"><label>Categoria<select id="categoriaId" required></select></label></div>
+<div class="field full"><label>Descrição<textarea id="descricao" maxlength="600"></textarea></label></div>
+<div class="field full"><label>Ingredientes (separados por vírgula)<input id="ingredientes" maxlength="300" placeholder="Pão, carne grelhada, queijo, molho especial"></label></div>
+<div class="field"><label>Preço em Kz (opcional)<input id="preco" type="number" min="0" step="1" placeholder="Deixa vazio para mostrar \"XX.XXX Kz\""></label></div>
+<div class="field"><label>Etiqueta (opcional)<input id="etiqueta" maxlength="30" placeholder="Ex.: Mais pedido, Novo"></label></div>
+<div class="field full"><label>Extras (um por linha: "Nome, preço" — preço opcional)<textarea id="extras" maxlength="400" placeholder="Queijo extra, 500&#10;Bacon"></textarea></label></div>
+<div class="field full"><label>Opções de personalização (uma por linha)<textarea id="opcoes" maxlength="300" placeholder="Sem cebola&#10;Sem molho&#10;Bem passado"></textarea></label></div>
+<div class="field"><label>Ordem<input id="ordem" type="number" step="1" value="0"></label></div>
+<label class="check"><input id="disponivel" type="checkbox" checked> Disponível</label>
+<label class="check"><input id="destaque" type="checkbox"> <svg class='icon icon-star' aria-hidden='true'><use href='#i-star'/></svg> Destaque na home</label>
+<div class="field full"><div class="actions-row"><button class="btn btn-primary" id="save" type="submit">Publicar</button><button class="btn btn-secondary" type="button" id="cancel">Cancelar</button></div></div>
+</form></div>
+<div class="panel" style="margin-top:20px"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estado</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div></div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase.js"></script><script src="../js/auth.js"></script><script src="../js/admin.js"></script><script>
+(async()=>{await initAdminUI("produtos","Produtos");
+const formCard=document.getElementById("formCard"),form=document.getElementById("prodForm"),rows=document.getElementById("rows"),image=document.getElementById("image"),preview=document.getElementById("preview"),categoriaId=document.getElementById("categoriaId");
+let cats=[];
+function extrasToText(arr){return (arr||[]).map(e=>e.preco==null?e.nome:`${e.nome}, ${e.preco}`).join("\n")}
+function textToExtras(txt){return txt.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{const i=l.lastIndexOf(",");if(i<0)return{nome:l,preco:null};const nome=l.slice(0,i).trim();const p=Number(l.slice(i+1).trim().replace(/[^\d.]/g,""));return{nome,preco:isFinite(p)&&l.slice(i+1).trim()!==""?p:null}})}
+function textToOpcoes(txt){return txt.split("\n").map(l=>l.trim()).filter(Boolean)}
+async function loadCategorias(){const {data}=await designeSupabase.from("categorias").select("id,nome").order("ordem",{ascending:true});cats=data||[];categoriaId.innerHTML=cats.map(c=>`<option value="${c.id}">${escapeHtml(c.nome)}</option>`).join("")||'<option value="">Cria uma categoria primeiro</option>'}
+function catNome(id){return (cats.find(c=>c.id===id)||{}).nome||"Sem categoria"}
+function reset(){form.reset();id.value="";oldImage.value="";preview.src="../assets/placeholder-burger.svg";disponivel.checked=true;destaque.checked=false;ordem.value="0";formCard.hidden=true}
+async function load(){const {data,error}=await designeSupabase.from("produtos").select("*").order("destaque",{ascending:false}).order("ordem",{ascending:true});if(error){adminToast(error.message,"error");return}
+rows.innerHTML=data.length?data.map(p=>`<tr><td><div class="cell-main"><img class="thumb" src="${escapeHtml(p.imagem_url||"../assets/placeholder-burger.svg")}"><div><strong>${escapeHtml(p.nome)}${p.destaque?" <svg class='icon icon-star' aria-hidden='true'><use href='#i-star'/></svg>":""}</strong>${p.etiqueta?`<div class="muted">${escapeHtml(p.etiqueta)}</div>`:""}</div></div></td><td>${escapeHtml(catNome(p.categoria_id))}</td><td>${formatKz(p.preco)}</td><td>${p.disponivel?'<span class="pill on">Disponível</span>':'<span class="pill">Desativado</span>'}</td><td><div class="actions-row"><button class="btn btn-secondary edit" data-id="${p.id}">Editar</button><button class="btn ${p.disponivel?'btn-danger':'btn-success'} toggle" data-id="${p.id}">${p.disponivel?'Desativar':'Ativar'}</button><button class="btn btn-danger delete" data-id="${p.id}">Excluir</button></div></td></tr>`).join(""):'<tr><td colspan="5"><div class="empty">Ainda não há produtos.</div></td></tr>';
+rows.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(b.dataset.id));rows.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>toggle(b.dataset.id));rows.querySelectorAll(".delete").forEach(b=>b.onclick=()=>del(b.dataset.id));}
+async function edit(uid){const {data,error}=await designeSupabase.from("produtos").select("*").eq("id",uid).single();if(error)return adminToast(error.message,"error");
+id.value=data.id;oldImage.value=data.imagem_url||"";nome.value=data.nome;descricao.value=data.descricao||"";ingredientes.value=data.ingredientes||"";preco.value=data.preco??"";etiqueta.value=data.etiqueta||"";
+extras.value=extrasToText(data.extras);opcoes.value=(data.opcoes||[]).join("\n");ordem.value=data.ordem??0;
+disponivel.checked=data.disponivel;destaque.checked=data.destaque;categoriaId.value=data.categoria_id||"";preview.src=data.imagem_url||"../assets/placeholder-burger.svg";
+formCard.hidden=false;scrollTo({top:0,behavior:"smooth"})}
+async function toggle(uid){const {data}=await designeSupabase.from("produtos").select("disponivel").eq("id",uid).single();if(!data)return;const {error}=await designeSupabase.from("produtos").update({disponivel:!data.disponivel,updated_at:new Date().toISOString()}).eq("id",uid);if(error)adminToast(error.message,"error");else{adminToast("Estado atualizado.");load()}}
+async function del(uid){if(!confirm("Excluir este produto? Esta ação não pode ser desfeita."))return;const {data}=await designeSupabase.from("produtos").select("imagem_url").eq("id",uid).single();const {error}=await designeSupabase.from("produtos").delete().eq("id",uid);if(error)adminToast(error.message,"error");else{if(data?.imagem_url)deleteImageByUrl(data.imagem_url,"produtos");adminToast("Produto excluído.");load()}}
+image.onchange=()=>{if(image.files[0])preview.src=URL.createObjectURL(image.files[0])};
+document.getElementById("newBtn").onclick=async()=>{reset();await loadCategorias();formCard.hidden=false;scrollTo({top:0,behavior:"smooth"})};document.getElementById("cancel").onclick=reset;
+form.onsubmit=async e=>{e.preventDefault();if(!categoriaId.value){adminToast("Cria pelo menos uma categoria antes de adicionar produtos.","error");return}const save=document.getElementById("save");save.disabled=true;save.textContent="A publicar…";
+try{let imageUrl=oldImage.value;if(image.files[0])imageUrl=await uploadImage(image.files[0],"produtos","produtos");
+const payload={categoria_id:categoriaId.value,nome:nome.value.trim(),descricao:descricao.value.trim(),ingredientes:ingredientes.value.trim(),etiqueta:etiqueta.value.trim(),preco:preco.value===""?null:Number(preco.value),imagem_url:imageUrl,extras:textToExtras(extras.value),opcoes:textToOpcoes(opcoes.value),ordem:Number(ordem.value)||0,disponivel:disponivel.checked,destaque:destaque.checked,updated_at:new Date().toISOString()};
+let error;if(id.value){({error}=await designeSupabase.from("produtos").update(payload).eq("id",id.value))}else{({error}=await designeSupabase.from("produtos").insert(payload))}if(error)throw error;
+adminToast("Produto publicado com sucesso.");reset();load()}catch(e){adminToast(e.message||"Erro ao guardar produto.","error")}finally{save.disabled=false;save.textContent="Publicar"}};
+await loadCategorias();load();
+})();
+</script>
+</body></html>

@@ -1,147 +1,148 @@
-# DESIGNE decoração — Site + Painel Administrativo + Supabase
+# Cokylicious — Site + Menu digital + Carrinho + Painel Administrativo
 
-Site institucional para a DESIGNE decoração (móveis planejados, Luanda), adaptado a partir do
-projeto WANDE fornecido (mesma arquitetura: HTML/CSS/JS puro + Supabase, sem frameworks).
+Site da hamburgueria **Cokylicious** (Luanda), construído a partir do projeto anterior da
+DESIGNE decoração (mesma arquitetura: HTML/CSS/JS puro + Supabase, sem frameworks). O que era
+da DESIGNE decoração foi movido para `_legado-designe/` (nada foi apagado — ver secção abaixo).
 
-## O que foi feito
-- Identidade visual nova: verde escuro + dourado + tons de madeira, tipografia Playfair Display
-  (títulos) + Manrope (texto), logótipo oficial aplicado no header, footer e favicon.
-- Header público SEM o item "Vídeos" — os vídeos aparecem dentro dos móveis, dos projetos e de
-  um bloco de destaque na home, nunca como página própria no menu.
-- Catálogo de **Móveis** (`moveis.html`), com preço opcional ("Preço sob orçamento" quando vazio)
-  e botão de vídeo opcional por móvel.
-- **Projetos** (`projetos.html`) com galeria de fotos adicionais por projeto e vídeo opcional —
-  ao clicar num projeto abre um modal com capa, descrição, fotos e o vídeo (quando existir).
-- Carrossel "Veja o nosso trabalho ganhar vida" na home, com todos os vídeos marcados como destaque no admin (pode ser mais de um), e botão "Ver todos os vídeos" que leva a `videos.html` (todos os vídeos publicados).
-- Painel administrativo em `/admin`: Dashboard, Móveis, Projetos (+ fotos), Vídeos, Serviços,
-  Configurações — tudo protegido por login e RLS no Supabase.
-- WhatsApp (+244 937 283 518), Facebook e Google Maps já ligados, e editáveis em
-  `admin/configuracoes.html` sem tocar no código.
+## O que existe hoje
+- **Home de secção única** (`index.html`): navbar, hero, marquee de marca, destaques, menu
+  digital por categorias (com modal de produto, extras e opções), combos, delivery, WhatsApp,
+  sobre nós, bloco "Feito em Luanda", galeria/Instagram, redes sociais, avaliações, localização +
+  mapa + horário, FAQ, footer e barra fixa no mobile.
+- **Carrinho de pedido** (`js/cart.js`): guarda o pedido no `localStorage` do telemóvel, soma
+  quantidades/extras, e monta a mensagem que é enviada por WhatsApp (`wa.me`) com um clique.
+- **Modo demo**: enquanto o Supabase não estiver ligado (ou se a ligação falhar), o site funciona
+  sozinho com dados de exemplo em `js/demo-data.js` — nunca fica com uma página vazia.
+- **Painel administrativo** em `/admin`: Dashboard, Produtos, Categorias, Combos, Galeria,
+  Avaliações, Configurações (dados da empresa + horário + contas de administrador) — tudo
+  protegido por login e RLS no Supabase.
+- Todos os **preços são opcionais**: se ficarem vazios, o site mostra "XX.XXX Kz" em vez de
+  inventar um valor — assim nada aparece com um preço que não corresponde à realidade.
+- Todas as **fotos são placeholders** (`assets/placeholder-burger.svg`, um desenho, não uma
+  foto real) até carregares fotos verdadeiras da Cokylicious pelo admin.
 - Schema `supabase.sql` completo, com RLS em todas as tabelas e buckets de Storage.
+
+## O que foi movido para `_legado-designe/`
+Conteúdo específico da DESIGNE decoração (móveis planejados) que não faz sentido para uma
+hamburgueria: `moveis.html`, `projetos.html`, `videos.html`, as páginas de admin equivalentes
+(`moveis.html`, `projetos.html`, `videos.html`, `servicos.html`), os scripts só usados por elas
+(`motion.js`, `lightbox.js`, `moveis-page.js`, `projetos-page.js`, `videos-page.js`,
+`video-utils.js`, `projeto-utils.js`), a pasta `assets/` original (10 fotos de móveis) e a pasta
+`cloudflare/` (upload de vídeos). Nada foi apagado — podes recuperar ou apagar definitivamente
+quando quiseres.
 
 ## Estrutura
 ```
-/index.html            (home)
-/moveis.html            (catálogo completo)
-/projetos.html          (portfólio completo)
-/videos.html            (todos os vídeos publicados)
-/assets/...
+/index.html
+/assets/placeholder-burger.svg
+/assets/favicon.svg
 /admin/
   login.html
   redefinir-senha.html
   index.html            (dashboard)
-  moveis.html
-  projetos.html
-  videos.html
-  servicos.html
+  produtos.html
+  categorias.html
+  combos.html
+  galeria.html
+  avaliacoes.html
   configuracoes.html
 /css/site.css
 /css/admin.css
 /js/supabase.js
-/js/video-utils.js
-/js/projeto-utils.js
+/js/demo-data.js        (dados de exemplo, modo demo)
+/js/cart.js             (carrinho + mensagem de WhatsApp)
+/js/site.js             (renderização do site público)
 /js/auth.js
 /js/admin.js
-/js/public.js
-/js/moveis-page.js
-/js/projetos-page.js
-/js/lightbox.js
-/cloudflare/stream-upload-worker.example.js   (opcional — ver secção Vídeos abaixo)
 /supabase.sql
+/supabase/functions/admin-users/index.ts
+/_legado-designe/       (tudo o que era da DESIGNE decoração)
 ```
 
 ## Configuração pelo celular
-1. Crie um projeto **novo** no Supabase (não reutilize o de outro cliente).
-2. Vá a **SQL Editor** → **New query**.
-3. Cole todo o conteúdo de `supabase.sql` e toque em **Run**.
-4. Vá a **Project Settings → API** e copie:
+1. Cria um projeto **novo** no Supabase (não reutilizes o de outro cliente).
+2. Vai a **SQL Editor** → **New query**.
+3. Cola todo o conteúdo de `supabase.sql` e toca em **Run**.
+4. Vai a **Project Settings → API** e copia:
    - Project URL
    - chave pública **anon** / **publishable**
-5. Edite `js/supabase.js`:
+5. Edita `js/supabase.js`:
    - `DESIGNE_SUPABASE_URL = "https://..."`
    - `DESIGNE_SUPABASE_ANON_KEY = "..."`
-6. Nunca coloque `service_role` ou qualquer chave secreta nesse ficheiro.
+   (o prefixo `DESIGNE_` é herdado do projeto anterior — só o nome da variável, não os dados.)
+6. Nunca coloques `service_role` ou qualquer chave secreta nesse ficheiro.
+7. Até fazeres isto, o site funciona sozinho em **modo demo**.
 
 ## Primeiro administrador
 1. Supabase → **Authentication → Users → Add user**.
-2. Crie o e-mail e senha do proprietário.
-3. Copie o UUID desse utilizador.
-4. Supabase → **SQL Editor** e execute:
+2. Cria o e-mail e senha do proprietário da Cokylicious.
+3. Copia o UUID desse utilizador.
+4. Supabase → **SQL Editor** e executa:
 ```sql
 insert into public.admin_users(user_id) values ('UUID-DO-ADMIN');
 ```
-5. Não habilite cadastro público (`signups`) para visitantes. O site não possui formulário de registo.
-
-## Vídeos — como publicar (hoje, sem infraestrutura extra)
-1. Faça upload do vídeo no **Cloudflare Stream** (dashboard da Cloudflare, ou pelo telemóvel em
-   cloudflarestream.com/watch — funciona no browser do telemóvel, sem precisar de app).
-2. Aguarde o processamento e copie o **UID do vídeo**.
-3. No admin, vá a **Vídeos → + Adicionar vídeo**, cole o UID, escolha uma thumbnail, associe
-   (opcionalmente) a um projeto ou móvel, e marque "Publicado".
-4. Se preferir usar YouTube/Vimeo em vez do Cloudflare Stream, cole o link do vídeo no mesmo
-   campo — o site reconhece automaticamente.
-5. Marque "Vídeo em destaque" para ele aparecer no bloco "Veja o nosso trabalho ganhar vida" na
-   home — só pode haver um vídeo em destaque de cada vez (o admin desmarca o anterior sozinho).
-6. Antes de publicar em produção, edite `js/video-utils.js` e troque `customer-CODIGO` pelo seu
-   customer code do Cloudflare Stream (aparece no painel do Stream, ao lado de qualquer vídeo).
-
-**Upload direto do telemóvel, sem sair do painel admin (opcional, próximo passo):** o ficheiro
-`cloudflare/stream-upload-worker.example.js` é um ponto de partida para um Cloudflare Worker que
-gera URLs de upload direto para o Stream, permitindo mandar o vídeo sem sair do painel admin da
-DESIGNE decoração. Não está implantado — precisa de uma conta Cloudflare Stream, de um API Token e
-de `wrangler deploy`. Até lá, o fluxo manual acima (passos 1–5) já funciona hoje.
+5. Não habilites cadastro público (`signups`) para visitantes. O site não tem formulário de registo.
 
 ## Criar utilizadores no painel (sem ir ao Supabase)
-Em **Configurações → Contas de administrador** pode ver, criar e remover utilizadores. Cada utilizador
-criado tem acesso completo ao painel. Para isto funcionar, crie **uma vez** a função `admin-users`
-no Supabase (ela guarda a chave secreta no servidor — nunca no site):
+Em **Configurações → Contas de administrador** dá para ver, criar e remover utilizadores. Cada
+utilizador criado tem acesso completo ao painel. Para isto funcionar, cria **uma vez** a função
+`admin-users` no Supabase (ela guarda a chave secreta no servidor — nunca no site):
 1. Supabase → **Edge Functions** → **Deploy a new function** → **Via Editor**.
-2. Nome: `admin-users`. Cole todo o código de `supabase/functions/admin-users/index.ts`.
-3. Clique em **Deploy**.
-4. Se ao usar o painel aparecer o erro "Invalid JWT", abra as definições da função e desligue
+2. Nome: `admin-users`. Cola todo o código de `supabase/functions/admin-users/index.ts`.
+3. Clica em **Deploy**.
+4. Se ao usar o painel aparecer o erro "Invalid JWT", abre as definições da função e desliga
    **Verify JWT** (a função valida o login e a permissão de administrador por conta própria).
+
+## Antes de publicar em produção — checklist
+1. **Configurações**: preenche o WhatsApp real (hoje é `244900000000`, um número de exemplo), o
+   telefone, a morada, o Instagram/Facebook, os textos do hero/sobre e o horário de funcionamento.
+2. **Categorias**: confirma/edita as 6 categorias de exemplo (Hambúrgueres, Acompanhamentos,
+   Bebidas, Frango, Especiais, Sobremesas).
+3. **Produtos**: apaga os 10 produtos de exemplo (ou edita-os) e publica o menu real, com fotos e
+   preços verdadeiros. Extras e opções de personalização são opcionais por produto.
+4. **Combos**: idem.
+5. **Galeria**: troca as fotos de exemplo por fotos reais (equipa, cozinha, hambúrgueres,
+   clientes) — usadas na secção "Segue a fome" e na secção "Sobre nós".
+6. **Avaliações**: substitui os depoimentos de exemplo por avaliações reais de clientes.
+7. No `index.html`, troca a foto do hero (`assets/placeholder-burger.svg`) por uma foto real —
+   procura o comentário `TROCAR` no ficheiro para encontrar rapidamente todos os pontos com
+   imagens de exemplo.
 
 ## Ícones e ficheiros
 - Os ícones do site e do painel são SVG inline (sprite no início de cada página, `<use href="#i-nome">`).
-  Para usar um ícone novo, adicione um `<symbol id="i-nome">` ao sprite.
+  Para usar um ícone novo, adiciona um `<symbol id="i-nome">` ao sprite.
 - Nos formulários do admin, o botão nativo "Escolher arquivo" é substituído automaticamente por um
   botão com ícone (`js/admin.js`).
 
 ## Teste
-- Abra `/admin/login.html`.
-- Use o e-mail/senha do utilizador criado.
-- Deve entrar em `/admin/index.html`.
-- Publique um móvel com foto do telefone — deve aparecer em `/moveis.html` e na home.
-- Publique um projeto com foto de capa, depois adicione fotos extra e, opcionalmente, associe um
-  vídeo — abra o projeto no site público para confirmar que a galeria e o vídeo aparecem.
-- Publique um vídeo e marque-o como destaque — deve aparecer na home, na secção "Veja o nosso
-  trabalho ganhar vida".
+- Abre `/index.html` (ou `/admin/login.html` para o painel).
+- Sem Supabase configurado, o site já mostra o menu de exemplo — confirma que o carrinho soma
+  quantidades e que "Pedir pelo WhatsApp" abre o `wa.me` com a mensagem correta.
+- Com Supabase configurado: entra no painel, publica uma categoria, depois um produto com foto —
+  deve aparecer no menu do site público em poucos segundos (recarrega a página).
+- Testa o fluxo completo: abrir um produto → escolher extras/opções → adicionar ao carrinho →
+  abrir o carrinho → escolher "Delivery" ou "Levantar no local" → enviar pelo WhatsApp.
 
 ## Observações importantes
-- Para produção, publique o site em HTTPS (Vercel, Netlify, GitHub Pages, hospedagem própria etc.).
+- Para produção, publica o site em HTTPS (Vercel, Netlify, GitHub Pages, hospedagem própria etc.).
 - A chave pública (anon) pode ficar visível no frontend; a segurança real vem das RLS/policies.
 - As imagens são públicas porque o site precisa de as mostrar sem autenticação. Escrita e exclusão
   são restritas por RLS de Storage a administradores.
-- As fotos incluídas (`assets/*.jpg`) são as fotos de teste fornecidas — substitua-as pelo admin
-  assim que tiver fotos reais dos móveis e projetos da DESIGNE decoração.
-- Este projeto **não reutiliza** a base de dados Supabase do cliente WANDE (usado como ponto de
-  partida) — configure um projeto Supabase novo e exclusivo, como indicado acima.
+- Este projeto **não reutiliza** a base de dados Supabase da DESIGNE decoração (nem de nenhum
+  outro cliente) — configura um projeto Supabase novo e exclusivo, como indicado acima.
 
 ## Possíveis erros
-**"Configure primeiro o Supabase"** → preencha `js/supabase.js` com URL e chave pública.
+**"Configure primeiro o Supabase"** → preenche `js/supabase.js` com URL e chave pública.
 
-**"E-mail ou senha inválidos"** → confirme o utilizador em Authentication → Users.
+**"E-mail ou senha inválidos"** → confirma o utilizador em Authentication → Users.
 
-**"Este utilizador não está autorizado"** → confira se o UUID existe em `public.admin_users`.
+**"Este utilizador não está autorizado"** → confere se o UUID existe em `public.admin_users`.
 
-**Erro de RLS ao guardar** → confirme que `supabase.sql` foi executado inteiro e que o utilizador
+**Erro de RLS ao guardar** → confirma que `supabase.sql` foi executado inteiro e que o utilizador
 está em `admin_users`.
 
-**Upload de imagem falha** → confirme que os buckets `moveis`, `projetos`, `servicos` e `videos`
-existem (o `supabase.sql` já os cria) e que as policies de Storage foram criadas.
+**Upload de imagem falha** → confirma que os buckets `produtos`, `combos` e `galeria` existem (o
+`supabase.sql` já os cria) e que as policies de Storage foram criadas.
 
-**O vídeo não reproduz** → confirme que trocou `customer-CODIGO` em `js/video-utils.js` pelo seu
-customer code do Cloudflare Stream, ou que colou uma URL de embed válida (YouTube/Vimeo).
-
-**Site publicado em subpasta** → os links públicos/admin são relativos; mantenha a estrutura de
+**Site publicado em subpasta** → os links públicos/admin são relativos; mantém a estrutura de
 pastas intacta.

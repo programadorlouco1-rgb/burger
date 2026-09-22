@@ -1,4 +1,4 @@
-// Edge Function "admin-users" — DESIGNE decoração
+// Edge Function "admin-users" — Cokylicious
 // Permite que um administrador (já autenticado no painel) crie, liste e remova contas de
 // administrador SEM sair do site. A chave secreta do Supabase fica só aqui, no servidor
 // (nunca no navegador). Como implantar: ver README.md, secção "Criar utilizadores no painel".

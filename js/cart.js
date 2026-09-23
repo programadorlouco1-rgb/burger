@@ -47,7 +47,7 @@
   }
   function buildMessage(items, tipo, notes, nome){
     var lines = items.map(function(i){
-      var l = (i.emoji || "🍔") + " " + i.nome + " x" + i.qty;
+      var l = (i.emoji || "") + " " + i.nome + " x" + i.qty;
       i.extras.forEach(function(e){ l += "\n   + " + e.nome; });
       i.opcoes.forEach(function(o){ l += "\n   • " + o; });
       return l;
@@ -81,7 +81,7 @@
 
   function add(item){
     var it = {
-      kind: item.kind || "produto", id: String(item.id), nome: item.nome, emoji: item.emoji || "🍔",
+      kind: item.kind || "produto", id: String(item.id), nome: item.nome, emoji: item.emoji || "",
       preco: item.preco == null ? null : Number(item.preco),
       qty: Math.max(1, Math.min(99, parseInt(item.qty, 10) || 1)),
       extras: (item.extras || []).slice(), opcoes: (item.opcoes || []).slice()
@@ -133,7 +133,7 @@
 
     var box = $("#cartItems"); if (!box) return;
     if (!state.items.length) {
-      box.innerHTML = '<p class="cart-empty">O teu pedido está vazio.<br>Escolhe algo do menu 🍔</p>';
+      box.innerHTML = '<p class="cart-empty">O teu pedido está vazio.<br>Escolhe algo do menu </p>';
     } else {
       box.innerHTML = state.items.map(function(i){
         var sub = i.extras.map(function(e){ return "+ " + esc(e.nome); })

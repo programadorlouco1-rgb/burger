@@ -30,12 +30,12 @@
     },
 
     categorias: [
-      { id: "c1", nome: "Hambúrgueres",     emoji: "🍔", ordem: 1 },
-      { id: "c2", nome: "Acompanhamentos",  emoji: "🍟", ordem: 2 },
-      { id: "c3", nome: "Bebidas",          emoji: "🥤", ordem: 3 },
-      { id: "c4", nome: "Frango",           emoji: "🍗", ordem: 4 },
-      { id: "c5", nome: "Especiais",        emoji: "🔥", ordem: 5 },
-      { id: "c6", nome: "Sobremesas",       emoji: "🍰", ordem: 6 }
+      { id: "c1", nome: "Hambúrgueres",     ordem: 1 },
+      { id: "c2", nome: "Acompanhamentos",  ordem: 2 },
+      { id: "c3", nome: "Bebidas",          ordem: 3 },
+      { id: "c4", nome: "Frango",           ordem: 4 },
+      { id: "c5", nome: "Especiais",        ordem: 5 },
+      { id: "c6", nome: "Sobremesas",       ordem: 6 }
     ],
 
     produtos: [

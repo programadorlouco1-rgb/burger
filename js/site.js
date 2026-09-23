@@ -88,7 +88,7 @@
      ========================================================= */
   function catEmoji(id){
     var c = S.categorias.filter(function(x){ return String(x.id) === String(id); })[0];
-    return (c && c.emoji) || "🍔";
+    return (c && c.emoji) || "";
   }
   function tagHtml(t){ return t ? '<span class="tag">' + esc(t) + "</span>" : ""; }
 
@@ -133,7 +133,7 @@
     if (!tabs || !grid) return;
     if (!S.produtos.length) {
       tabs.innerHTML = "";
-      grid.innerHTML = '<p class="empty">O menu está a ser preparado. Volta já já! 🍔</p>';
+      grid.innerHTML = '<p class="empty">O menu está a ser preparado. Volta já já! </p>';
       return;
     }
     if (!S.cat && S.categorias.length) S.cat = String(S.categorias[0].id);
@@ -141,7 +141,7 @@
       var on = String(c.id) === S.cat;
       return '<button class="tab' + (on ? " on" : "") + '" type="button" role="tab" aria-selected="' + on + '" data-tab="' + esc(c.id) + '">' +
         '<span aria-hidden="true">' + esc(c.emoji || "") + "</span> " + esc(c.nome) + "</button>";
-    }).join("") + (S.combos.length ? '<a class="tab" href="#combos"><span aria-hidden="true">🎁</span> Combos</a>' : "");
+    }).join("") + (S.combos.length ? '<a class="tab" href="#combos"><span aria-hidden="true"></span> Combos</a>' : "");
     var list = S.produtos.filter(function(p){ return String(p.categoria_id) === S.cat; });
     grid.innerHTML = list.length ? list.map(cardHtml).join("") : '<p class="empty">Ainda não há itens nesta categoria.</p>';
     reveal(grid);
@@ -275,7 +275,7 @@
       if (e.target.closest("[data-delivery]")) {
         e.preventDefault();
         if (Coky.cart.count() > 0) { Coky.cart.setTipo("Delivery"); Coky.cart.open(); }
-        else { Coky.toast("Escolhe o que queres e envia o pedido 🛵"); var m = $("#menu"); if (m) m.scrollIntoView({ behavior: "smooth" }); }
+        else { Coky.toast("Escolhe o que queres e envia o pedido "); var m = $("#menu"); if (m) m.scrollIntoView({ behavior: "smooth" }); }
         return;
       }
       // menu mobile

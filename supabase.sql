@@ -14,7 +14,7 @@ create table if not exists public.admin_users (
 create table if not exists public.categorias (
   id uuid primary key default gen_random_uuid(),
   nome text not null,
-  emoji text not null default '🍔',
+  emoji text not null default '',
   ordem integer not null default 0,
   ativo boolean not null default true,
   created_at timestamptz not null default now(),
@@ -244,7 +244,7 @@ using (bucket_id in ('produtos','combos','galeria') and public.is_coky_admin());
 
 -- SEED de categorias (edita/substitui tudo depois pelo admin). Executa este bloco apenas UMA vez.
 insert into public.categorias (nome, emoji, ordem) values
-('Hambúrgueres','🍔',1),
+('Hambúrgueres','',1),
 ('Acompanhamentos','🍟',2),
 ('Bebidas','🥤',3),
 ('Frango','🍗',4),

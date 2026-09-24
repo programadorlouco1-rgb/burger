@@ -39,6 +39,12 @@
     "<symbol id='i-settings' viewBox='0 0 24 24'><path d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/><circle cx='12' cy='12' r='3'/></symbol>"+
     "<symbol id='i-log-out' viewBox='0 0 24 24'><path d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/><polyline points='16 17 21 12 16 7'/><line x1='21' x2='9' y1='12' y2='12'/></symbol>"+
     "<symbol id='i-star' viewBox='0 0 24 24'><path d='M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z'/></symbol>"+
+    "<symbol id='i-burger' viewBox='0 0 24 24'><path d='M4 11a8 7 0 0 1 16 0Z'/><path d='M3 14l3 1.5L9 14l3 1.5L15 14l3 1.5L21 14'/><path d='M4 18h16v.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5Z'/></symbol>"+
+    "<symbol id='i-fries' viewBox='0 0 24 24'><path d='M6 11h12l-1.4 10H7.4Z'/><path d='M8.5 11V6'/><path d='M12 11V3.5'/><path d='M15.5 11V6'/></symbol>"+
+    "<symbol id='i-cup' viewBox='0 0 24 24'><path d='m6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.5a2 2 0 0 0 2-1.72L18 8'/><path d='M5 8h14'/><path d='M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0'/><path d='m12 8 1-6h2'/></symbol>"+
+    "<symbol id='i-drumstick' viewBox='0 0 24 24'><path d='M15.4 15.63a7.875 6 135 1 1 6.23-6.23 4.5 3.43 135 0 0-6.23 6.23'/><path d='m8.29 12.71-2.6 2.6a2.5 2.5 0 1 0-1.65 4.65A2.5 2.5 0 1 0 8.7 18.3l2.59-2.59'/></symbol>"+
+    "<symbol id='i-flame' viewBox='0 0 24 24'><path d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/></symbol>"+
+    "<symbol id='i-icecream' viewBox='0 0 24 24'><path d='m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11'/><path d='M17 7A5 5 0 0 0 7 7'/><path d='M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4'/></symbol>"+
     "<symbol id='i-x' viewBox='0 0 24 24'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></symbol>"+
     "<symbol id='i-menu' viewBox='0 0 24 24'><line x1='4' x2='20' y1='12' y2='12'/><line x1='4' x2='20' y1='6' y2='6'/><line x1='4' x2='20' y1='18' y2='18'/></symbol>"+
     "<symbol id='i-external' viewBox='0 0 24 24'><path d='M7 7h10v10'/><path d='M7 17 17 7'/></symbol>"+
@@ -59,6 +65,20 @@
     ["configuracoes","configuracoes.html","i-settings","Configurações"]
   ];
   const ic=id=>`<svg class='icon' aria-hidden='true'><use href='#${id}'/></svg>`;
+  // Ícone da categoria: o campo "emoji" guarda o nome do ícone; se estiver vazio (ou for um emoji antigo), deduz-se pelo nome.
+  window.catIconKey=function(c){
+    const k=String(c&&c.emoji||"").trim();
+    if(["burger","fries","cup","drumstick","flame","icecream","utensils"].includes(k)) return k;
+    const n=String(c&&c.nome||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    if(/hamburg|burger/.test(n)) return "burger";
+    if(/acompanh|batata|fries/.test(n)) return "fries";
+    if(/bebida|sumo|refrig|drink/.test(n)) return "cup";
+    if(/frango|chicken|asa/.test(n)) return "drumstick";
+    if(/especia|promo/.test(n)) return "flame";
+    if(/sobremes|doce|gelado|dessert/.test(n)) return "icecream";
+    return "utensils";
+  };
+  window.catIcon=c=>ic(window.catIconKey(c));
 
   // Preenche <aside class="admin-sidebar"> e <header class="admin-topbar"> de cada página.
   window.initAdminUI=async function(active,title){

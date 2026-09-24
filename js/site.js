@@ -86,9 +86,23 @@
   /* =========================================================
      3) MENU, DESTAQUES, COMBOS, GALERIA, AVALIAÇÕES
      ========================================================= */
-  function catEmoji(id){
-    var c = S.categorias.filter(function(x){ return String(x.id) === String(id); })[0];
-    return (c && c.emoji) || "";
+  // O campo "emoji" da categoria guarda agora o NOME do ícone (burger, fries, cup, drumstick, flame, icecream, utensils).
+  // Se estiver vazio (ou ainda tiver um emoji antigo), o ícone é escolhido pelo nome da categoria.
+  var CAT_ICONS = ["burger", "fries", "cup", "drumstick", "flame", "icecream", "utensils"];
+  function catIcon(c){
+    var k = c ? String(c.emoji || "").trim() : "";
+    if (CAT_ICONS.indexOf(k) >= 0) return k;
+    var n = c ? String(c.nome || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+    if (/hamburg|burger/.test(n)) return "burger";
+    if (/acompanh|batata|fries/.test(n)) return "fries";
+    if (/bebida|sumo|refrig|drink/.test(n)) return "cup";
+    if (/frango|chicken|asa/.test(n)) return "drumstick";
+    if (/especia|promo/.test(n)) return "flame";
+    if (/sobremes|doce|gelado|dessert/.test(n)) return "icecream";
+    return "utensils";
+  }
+  function catIconById(id){
+    return catIcon(S.categorias.filter(function(x){ return String(x.id) === String(id); })[0]);
   }
   function tagHtml(t){ return t ? '<span class="tag">' + esc(t) + "</span>" : ""; }
 
@@ -133,15 +147,15 @@
     if (!tabs || !grid) return;
     if (!S.produtos.length) {
       tabs.innerHTML = "";
-      grid.innerHTML = '<p class="empty">O menu está a ser preparado. Volta já já! </p>';
+      grid.innerHTML = '<p class="empty">O menu está a ser preparado. Volta já já!</p>';
       return;
     }
     if (!S.cat && S.categorias.length) S.cat = String(S.categorias[0].id);
     tabs.innerHTML = S.categorias.map(function(c){
       var on = String(c.id) === S.cat;
       return '<button class="tab' + (on ? " on" : "") + '" type="button" role="tab" aria-selected="' + on + '" data-tab="' + esc(c.id) + '">' +
-        '<span aria-hidden="true">' + esc(c.emoji || "") + "</span> " + esc(c.nome) + "</button>";
-    }).join("") + (S.combos.length ? '<a class="tab" href="#combos"><span aria-hidden="true"></span> Combos</a>' : "");
+        Coky.ico(catIcon(c)) + esc(c.nome) + "</button>";
+    }).join("") + (S.combos.length ? '<a class="tab" href="#combos">' + Coky.ico("gift") + "Combos</a>" : "");
     var list = S.produtos.filter(function(p){ return String(p.categoria_id) === S.cat; });
     grid.innerHTML = list.length ? list.map(cardHtml).join("") : '<p class="empty">Ainda não há itens nesta categoria.</p>';
     reveal(grid);
@@ -172,8 +186,9 @@
     sec.hidden = !S.avaliacoes.length;
     box.innerHTML = S.avaliacoes.map(function(a){
       var n = Math.max(1, Math.min(5, parseInt(a.estrelas, 10) || 5));
-      return '<figure class="review" data-reveal><div class="stars" aria-label="' + n + ' de 5 estrelas">' +
-        "★★★★★".slice(0, n) + '<span class="off">' + "★★★★★".slice(0, 5 - n) + "</span></div>" +
+      var star = Coky.ico("star");
+      return '<figure class="review" data-reveal><div class="stars" role="img" aria-label="' + n + ' de 5 estrelas">' +
+        star.repeat(n) + '<span class="off">' + star.repeat(5 - n) + "</span></div>" +
         "<blockquote>" + esc(a.comentario) + "</blockquote><figcaption>" + esc(a.nome) + "</figcaption></figure>";
     }).join("");
     reveal(box);
@@ -238,7 +253,7 @@
   function addFromModal(){
     if (!M) return;
     Coky.cart.add({
-      kind: "produto", id: M.p.id, nome: M.p.nome, emoji: catEmoji(M.p.categoria_id), preco: M.p.preco,
+      kind: "produto", id: M.p.id, nome: M.p.nome, icon: catIconById(M.p.categoria_id), preco: M.p.preco,
       qty: M.qty, extras: selectedExtras(), opcoes: selectedOpcoes()
     });
     closeProduct();
@@ -249,11 +264,11 @@
      ========================================================= */
   function quickAdd(id){
     var p = S.produtos.filter(function(x){ return String(x.id) === String(id); })[0];
-    if (p) Coky.cart.add({ kind: "produto", id: p.id, nome: p.nome, emoji: catEmoji(p.categoria_id), preco: p.preco, qty: 1 });
+    if (p) Coky.cart.add({ kind: "produto", id: p.id, nome: p.nome, icon: catIconById(p.categoria_id), preco: p.preco, qty: 1 });
   }
   function addCombo(id){
     var k = S.combos.filter(function(x){ return String(x.id) === String(id); })[0];
-    if (k) Coky.cart.add({ kind: "combo", id: k.id, nome: k.nome, emoji: "🎁", preco: k.preco, qty: 1 });
+    if (k) Coky.cart.add({ kind: "combo", id: k.id, nome: k.nome, icon: "gift", preco: k.preco, qty: 1 });
   }
 
   function bind(){
@@ -275,7 +290,7 @@
       if (e.target.closest("[data-delivery]")) {
         e.preventDefault();
         if (Coky.cart.count() > 0) { Coky.cart.setTipo("Delivery"); Coky.cart.open(); }
-        else { Coky.toast("Escolhe o que queres e envia o pedido "); var m = $("#menu"); if (m) m.scrollIntoView({ behavior: "smooth" }); }
+        else { Coky.toast("Escolhe o que queres e envia o pedido."); var m = $("#menu"); if (m) m.scrollIntoView({ behavior: "smooth" }); }
         return;
       }
       // menu mobile

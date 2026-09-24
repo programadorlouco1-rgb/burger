@@ -47,7 +47,7 @@
   }
   function buildMessage(items, tipo, notes, nome){
     var lines = items.map(function(i){
-      var l = (i.emoji || "") + " " + i.nome + " x" + i.qty;
+      var l = "• " + i.nome + " x" + i.qty;
       i.extras.forEach(function(e){ l += "\n   + " + e.nome; });
       i.opcoes.forEach(function(o){ l += "\n   • " + o; });
       return l;
@@ -81,7 +81,7 @@
 
   function add(item){
     var it = {
-      kind: item.kind || "produto", id: String(item.id), nome: item.nome, emoji: item.emoji || "",
+      kind: item.kind || "produto", id: String(item.id), nome: item.nome, icon: item.icon || "",
       preco: item.preco == null ? null : Number(item.preco),
       qty: Math.max(1, Math.min(99, parseInt(item.qty, 10) || 1)),
       extras: (item.extras || []).slice(), opcoes: (item.opcoes || []).slice()
@@ -101,6 +101,9 @@
   }
   function clear(){ state.items = []; save(); render(); }
   function setTipo(t){ if (TIPOS.indexOf(t) >= 0) { state.tipo = t; save(); render(); } }
+
+  /* ---------- ícones (sprite no index.html) ---------- */
+  function ico(name){ return '<svg class="ico" aria-hidden="true"><use href="#i-' + name + '"/></svg>'; }
 
   /* ---------- UI: toast ---------- */
   var toastTimer;
@@ -133,19 +136,19 @@
 
     var box = $("#cartItems"); if (!box) return;
     if (!state.items.length) {
-      box.innerHTML = '<p class="cart-empty">O teu pedido está vazio.<br>Escolhe algo do menu </p>';
+      box.innerHTML = '<p class="cart-empty">' + ico("bag") + '<span>O teu pedido está vazio.<br>Escolhe algo do menu.</span></p>';
     } else {
       box.innerHTML = state.items.map(function(i){
         var sub = i.extras.map(function(e){ return "+ " + esc(e.nome); })
           .concat(i.opcoes.map(function(o){ return "• " + esc(o); })).join("<br>");
         var line = isUnpriced(i) ? "XX.XXX Kz" : fmt(unitPrice(i) * i.qty);
-        return '<div class="cart-item"><div class="ci-main"><b>' + esc(i.emoji) + " " + esc(i.nome) + "</b>" +
+        return '<div class="cart-item"><div class="ci-main"><b>' + (i.icon ? ico(i.icon) : "") + "<span>" + esc(i.nome) + "</span></b>" +
           (sub ? '<small>' + sub + "</small>" : "") + "<span class=\"ci-price\">" + line + "</span></div>" +
           '<div class="qty" role="group" aria-label="Quantidade de ' + esc(i.nome) + '">' +
           '<button type="button" data-act="dec" data-key="' + esc(i.key) + '" aria-label="Menos">−</button>' +
           "<span>" + i.qty + "</span>" +
           '<button type="button" data-act="inc" data-key="' + esc(i.key) + '" aria-label="Mais">+</button></div>' +
-          '<button class="ci-rm" type="button" data-act="rm" data-key="' + esc(i.key) + '" aria-label="Remover ' + esc(i.nome) + '">✕</button></div>';
+          '<button class="ci-rm" type="button" data-act="rm" data-key="' + esc(i.key) + '" aria-label="Remover ' + esc(i.nome) + '">' + ico("x") + '</button></div>';
       }).join("");
     }
     var t = $("#cartTotal"); if (t) t.textContent = totals(state.items).ui;
@@ -192,6 +195,7 @@
     document.addEventListener("keydown", function(e){ if (e.key === "Escape") close(); });
   }
 
+  Coky.ico = ico;
   Coky.toast = toast;
   Coky.cart = { add: add, setQty: setQty, clear: clear, setTipo: setTipo, open: open, close: close, count: count,
     totals: totals, buildMessage: buildMessage, send: send, render: render, TIPOS: TIPOS };
